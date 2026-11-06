@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes y Gráficos de Ventas | Florería Shely</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN para gráficos visuales -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { shely: { light: '#fdf2f4', DEFAULT: '#e35d6a', dark: '#bc3b47', accent: '#f497a1' } } } }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-shely rounded-xl flex items-center justify-center text-white"><i class="fa-solid fa-chart-pie"></i></div>
+                <div><h1 class="font-bold text-lg">Reportes Financieros</h1><p class="text-xs text-rose-400">Análisis Semanal y Mensual</p></div>
+            </div>
+            <a href="admin.html" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-semibold transition-all"><i class="fa-solid fa-arrow-left mr-1"></i> Volver al Admin</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="bg-slate-800 border border-slate-700 p-6 rounded-3xl space-y-4">
+                <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-calendar-week text-shely"></i> Ventas de la Semana</h3>
+                <div class="h-72"><canvas id="weeklyChart"></canvas></div>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 p-6 rounded-3xl space-y-4">
+                <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-calendar-days text-shely"></i> Ventas del Mes</h3>
+                <div class="h-72"><canvas id="monthlyChart"></canvas></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 border-t border-slate-700 py-8 text-center text-xs text-slate-400">
+        <p>Florería Shely • Reportes Analíticos 2026 • FV DIGITAL HMO</p>
+    </footer>
+
+    <script>
+        const orders = JSON.parse(localStorage.getItem('shely_orders')) || [];
+        
+        // Simulación de datos para gráficos basados en órdenes reales
+        const totalSales = orders.reduce((acc, o) => acc + o.total, 0);
+
+        // Gráfico Semanal
+        const ctxWeekly = document.getElementById('weeklyChart').getContext('2d');
+        new Chart(ctxWeekly, {
+            type: 'bar',
+            data: {
+                labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+                datasets: [{
+                    label: 'Ventas ($ MXN)',
+                    data: [1200, 850, 1500, 2100, 1800, totalSales > 0 ? totalSales : 3200, 2400],
+                    backgroundColor: '#e35d6a',
+                    borderRadius: 8
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+
+        // Gráfico Mensual
+        const ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(ctxMonthly, {
+            type: 'line',
+            data: {
+                labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+                datasets: [{
+                    label: 'Ingresos Mensuales ($ MXN)',
+                    data: [8500, 11200, 9400, totalSales > 0 ? totalSales + 5000 : 14500],
+                    borderColor: '#f497a1',
+                    backgroundColor: 'rgba(227, 93, 106, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+    </script>
+</body>
+</html>
