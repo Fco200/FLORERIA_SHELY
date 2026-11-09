@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Florería Shely | Catálogo en Línea</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shely.css">
+    <style>
+        :root { --brand: #e35d6a; --brand-dark: #bc3b47; --accent: #f497a1; --soft: #fdf2f4; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-rose-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-12 h-12 grad-brand rounded-2xl flex items-center justify-center text-white shadow-md shadow-rose-200 group-hover:rotate-12 transition-transform duration-500">
+                    <i class="fa-solid fa-seedling text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-slate-900">Florería Shely</h1>
+                    <p class="text-xs text-brand font-medium"><i class="fa-solid fa-phone"></i> +52 662 415 4024</p>
+                </div>
+            </a>
+            <div class="flex items-center gap-3">
+                <div id="client-nav-area" class="flex items-center gap-2"></div>
+                <button onclick="SHELY.openCart()" class="relative p-2.5 bg-soft text-brand rounded-xl hover:bg-rose-100 transition-all duration-300 hover:scale-105">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                    <span id="cart-counter" class="absolute -top-1 -right-1 bg-brand text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                </button>
+                <a href="index.html" class="p-2.5 text-slate-400 hover:text-slate-600 rounded-xl transition-all" title="Inicio">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <section class="fade-in relative overflow-hidden rounded-3xl text-white p-8 sm:p-14 shadow-2xl" style="background: linear-gradient(135deg, #1e293b, #4c0519);">
+            <div class="blob w-72 h-72 bg-rose-400 -top-20 -left-10"></div>
+            <div class="blob w-64 h-64 bg-pink-300 -bottom-16 right-10" style="animation-delay: -4s"></div>
+            <i class="fa-solid fa-seedling float absolute right-10 top-10 text-8xl text-white opacity-10 hidden sm:block"></i>
+            <div class="relative z-10 max-w-xl space-y-5">
+                <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-medium text-rose-200 border border-white/10">
+                    <i class="fa-solid fa-location-dot text-rose-400"></i> Hermosillo, Sonora
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-bold tracking-tight leading-tight">Elegancia y frescura en cada <span class="text-gradient">detalle floral</span></h2>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">Diseños artesanales para fechas especiales. Inicia sesión, haz tu pedido y solicita arreglos totalmente personalizados.</p>
+                <div class="flex flex-wrap gap-3 pt-2">
+                    <a href="#catalogo" class="btn-brand px-6 py-3 rounded-2xl font-semibold text-sm shadow-lg"><i class="fa-solid fa-eye"></i> Ver catálogo</a>
+                    <button onclick="SHELY.openCustom()" class="bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md px-6 py-3 rounded-2xl font-semibold text-sm transition-all hover:-translate-y-0.5"><i class="fa-solid fa-wand-magic-sparkles"></i> Pedido personalizado</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="catalogo" class="space-y-8 scroll-mt-28">
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div id="category-filters" class="flex flex-wrap gap-2 w-full md:w-auto"></div>
+                <div class="relative w-full md:w-80">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="search-input" oninput="SHELY.applyFilters()" placeholder="Buscar arreglo floral..." class="field pl-10 shadow-sm">
+                </div>
+            </div>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <section class="reveal relative overflow-hidden rounded-3xl grad-brand text-white p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+            <div class="blob w-48 h-48 bg-white -top-10 -right-10"></div>
+            <div class="relative space-y-2">
+                <span class="text-xs font-bold uppercase tracking-widest opacity-80">Pedidos personalizados</span>
+                <h3 class="text-2xl sm:text-3xl font-bold">¿Tienes una idea en mente?</h3>
+                <p class="text-sm opacity-90 max-w-lg">Diseñamos arreglos a tu medida para bodas, XV años, aniversarios o cualquier evento. Cuéntanos y te enviamos cotización.</p>
+            </div>
+            <button onclick="SHELY.openCustom()" class="relative bg-white text-brand font-bold px-6 py-3.5 rounded-2xl shadow-lg hover:scale-105 transition-transform whitespace-nowrap">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Solicitar cotización
+            </button>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-12 mt-16 text-sm text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            <div>
+                <h4 class="font-bold text-slate-900 text-base mb-2">Florería Shely</h4>
+                <p class="text-xs text-slate-500">Hermosillo, Sonora. Arreglos florales y detalles que enamoran todos los días.</p>
+                <p class="text-xs text-brand font-semibold mt-2"><i class="fa-solid fa-phone"></i> +52 662 415 4024</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 text-base mb-2">Enlaces Rápidos</h4>
+                <ul class="space-y-1.5 text-xs">
+                    <li><a href="index.html" class="hover:text-brand transition-all">Inicio</a></li>
+                    <li><a href="pasteleria.html" class="hover:text-brand transition-all">Pastelería Shely</a></li>
+                    <li><a href="admin.html" class="hover:text-brand transition-all">Portal Administrativo</a></li>
+                </ul>
+            </div>
+            <div class="bg-rose-50/60 p-6 rounded-3xl border border-rose-100 space-y-2">
+                <span class="text-[10px] font-bold uppercase text-brand tracking-wider block">Desarrollo Profesional</span>
+                <h4 class="font-bold text-slate-900 text-sm">¿Quieres una página como esta para tu negocio?</h4>
+                <p class="text-xs text-slate-600">Impulsado por <strong>FV DIGITAL HMO</strong>.</p>
+                <a href="https://wa.me/526625374491?text=Hola,%20me%20interesa%20una%20página%20web%20profesional%20con%20sistema%20para%20mi%20negocio." target="_blank" class="inline-block bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 mr-1"></i> Contáctanos: 662 537 4491
+                </a>
+            </div>
+        </div>
+        <div class="border-t border-slate-100 mt-8 pt-6 text-xs text-slate-400 text-center">
+            <p>© 2026 Florería Shely. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.SHELY_CONFIG = {
+            id: 'floreria',
+            name: 'Florería Shely',
+            prefix: 'FS',
+            emoji: '🌸',
+            icon: 'fa-seedling',
+            whatsapp: '526624154024',
+            clabe: '012180001234567890',
+            storageKey: 'shely_products',
+            categories: ['Ramos', 'Arreglos', 'Rosas'],
+            customTypes: ['Boda', 'XV años', 'Aniversario', 'Cumpleaños', 'Funeral', 'Otro'],
+            customPlaceholder: 'Ej. Centro de mesa blanco y dorado con peonías, 10 piezas para la boda del 15 de diciembre...',
+            seedProducts: [
+                { id: 1, name: 'Bouquet Rosas Pasión', category: 'Rosas', price: 650, image: 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=600&q=80', description: '24 rosas rojas selectas con follaje fino.', hidden: false, status: 'Disponible' },
+                { id: 2, name: 'Arreglo Primavera Alegre', category: 'Arreglos', price: 890, image: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=600&q=80', description: 'Gerberas, girasoles y flores silvestres en base de cerámica.', hidden: false, status: 'Disponible' },
+                { id: 3, name: 'Ramo Girasoles de Luz', category: 'Ramos', price: 550, image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=600&q=80', description: 'Girasoles frescos con eucalipto.', hidden: false, status: 'Disponible' },
+                { id: 4, name: 'Caja Romántica Premium', category: 'Rosas', price: 980, image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80', description: 'Caja cilindro con rosas rojas y detalles finos.', hidden: false, status: 'Agotado' }
+            ]
+        };
+    </script>
+    <script src="shely.js"></script>
+</body>
+</html>

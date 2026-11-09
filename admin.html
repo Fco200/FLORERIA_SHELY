@@ -3,94 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Administrativo | Florería Shely</title>
+    <title>Panel Administrativo | Shely</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: { colors: { shely: { light: '#fdf2f4', DEFAULT: '#e35d6a', dark: '#bc3b47', accent: '#f497a1' } } }
-            }
-        }
-    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .fade-in { animation: fadeIn .35s ease-out both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        .modal-wrap { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 1rem; background: rgba(2, 6, 23, .8); backdrop-filter: blur(4px); z-index: 50; }
+        .modal-wrap.open { display: flex; }
+        .modal-box { animation: fadeIn .3s ease-out both; }
+        .inp { width: 100%; padding: .65rem .9rem; background: #0f172a; border: 1px solid #334155; border-radius: .75rem; font-size: .875rem; outline: none; color: #f1f5f9; }
+        .inp:focus { border-color: #e35d6a; box-shadow: 0 0 0 3px rgba(227, 93, 106, .25); }
+        .lbl { display: block; font-size: .7rem; font-weight: 600; text-transform: uppercase; color: #94a3b8; margin-bottom: .3rem; letter-spacing: .03em; }
+        .biz-grad-floreria { background: linear-gradient(135deg, #e35d6a, #f497a1); }
+        .biz-grad-pasteleria { background: linear-gradient(135deg, #d9467a, #f9b872); }
+    </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
 
     <!-- LOGIN -->
     <div id="login-screen" class="fixed inset-0 bg-slate-900 z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl max-w-md w-full p-8 shadow-2xl space-y-6">
+        <div class="bg-slate-800 border border-slate-700 rounded-3xl max-w-md w-full p-8 shadow-2xl space-y-6 fade-in">
             <div class="text-center space-y-2">
-                <div class="w-16 h-16 bg-shely rounded-2xl mx-auto flex items-center justify-center text-white text-2xl shadow-lg"><i class="fa-solid fa-lock"></i></div>
-                <h2 class="text-2xl font-bold">Portal Admin Shely</h2>
-                <p class="text-xs text-slate-400">Credenciales: admin / 12345</p>
+                <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-amber-400 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl shadow-lg"><i class="fa-solid fa-lock"></i></div>
+                <h2 class="text-2xl font-bold">Panel Administrativo Shely</h2>
+                <p class="text-xs text-slate-400">Administra Florería y Pastelería desde un solo lugar.</p>
             </div>
             <form onsubmit="handleLogin(event)" class="space-y-4">
-                <div><label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Usuario</label><input type="text" id="login-user" required value="admin" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-sm outline-none"></div>
-                <div><label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Contraseña</label><input type="password" id="login-pass" required value="12345" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-sm outline-none"></div>
-                <button type="submit" class="w-full py-3 bg-shely hover:bg-shely-dark text-white rounded-xl font-semibold transition-all shadow-lg">Iniciar Sesión</button>
+                <div><label class="lbl">Usuario</label><input type="text" id="login-user" required class="inp"></div>
+                <div><label class="lbl">Contraseña</label><input type="password" id="login-pass" required class="inp"></div>
+                <button type="submit" class="w-full py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-semibold transition-all shadow-lg">Iniciar sesión</button>
             </form>
-            <div class="text-center"><a href="index.html" class="text-xs text-slate-400 hover:text-white"><i class="fa-solid fa-arrow-left"></i> Volver al Catálogo</a></div>
+            <div class="text-center"><a href="index.html" class="text-xs text-slate-400 hover:text-white"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</a></div>
         </div>
     </div>
 
     <!-- PANEL -->
-    <div id="admin-panel" class="hidden flex-grow flex flex-col justify-between">
+    <div id="admin-panel" class="hidden flex-grow flex flex-col">
         <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700 sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-shely rounded-xl flex items-center justify-center text-white"><i class="fa-solid fa-gauge-high"></i></div>
+                    <div class="w-10 h-10 bg-rose-500 rounded-xl flex items-center justify-center text-white"><i class="fa-solid fa-gauge-high"></i></div>
                     <div>
                         <h1 class="font-bold text-lg">Panel Administrativo</h1>
                         <p class="text-xs text-rose-400">FV DIGITAL HMO • Shely</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <a href="reportes.html" class="px-4 py-2 bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> Reportes & Gráficos</a>
-                    <a href="index.html" target="_blank" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-semibold transition-all">Catálogo <i class="fa-solid fa-external-link-alt ml-1"></i></a>
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <a href="reportes.html" class="hidden sm:flex px-4 py-2 bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white rounded-xl text-xs font-semibold transition-all items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> Reportes</a>
+                    <a href="index.html" target="_blank" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-semibold transition-all">Sitio <i class="fa-solid fa-external-link-alt ml-1"></i></a>
                     <button onclick="logout()" class="px-4 py-2 bg-slate-700 text-slate-300 hover:bg-rose-600 hover:text-white rounded-xl text-xs font-semibold transition-all">Salir</button>
                 </div>
             </div>
         </header>
 
-        <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-            
-            <!-- ÓRDENES CON FILTROS Y TARJETAS -->
-            <section class="space-y-6">
+        <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 flex-grow">
+
+            <!-- SELECTOR DE NEGOCIO -->
+            <div id="biz-tabs" class="flex flex-col md:flex-row gap-4"></div>
+
+            <!-- SECCIONES -->
+            <nav class="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
+                <button onclick="setSection('pedidos')" data-sec="pedidos" class="sec-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"><i class="fa-solid fa-ticket mr-1"></i> Pedidos</button>
+                <button onclick="setSection('productos')" data-sec="productos" class="sec-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"><i class="fa-solid fa-boxes-stacked mr-1"></i> Productos y precios</button>
+                <button onclick="setSection('negocio')" data-sec="negocio" class="sec-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"><i class="fa-solid fa-store mr-1"></i> Datos del negocio</button>
+                <button onclick="setSection('claves')" data-sec="claves" class="sec-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"><i class="fa-solid fa-key mr-1"></i> Claves de acceso</button>
+            </nav>
+
+            <!-- PEDIDOS -->
+            <section id="sec-pedidos" class="space-y-6">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-ticket text-shely"></i> Control de Órdenes</h2>
-                        <p class="text-xs text-slate-400">Filtra por estatus y revisa detalles profesionales.</p>
+                        <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-ticket text-rose-400"></i> Pedidos de <span id="orders-biz-name"></span></h2>
+                        <p class="text-xs text-slate-400">Filtra por estatus y gestiona cada pedido.</p>
                     </div>
-                    <!-- Filtros -->
                     <div class="flex flex-wrap gap-2">
-                        <button onclick="filterOrders('todos')" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-shely text-white transition-all">Todas</button>
-                        <button onclick="filterOrders('Pendiente')" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all border border-slate-700">Pendientes</button>
-                        <button onclick="filterOrders('Confirmado')" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all border border-slate-700">En Elaboración</button>
-                        <button onclick="filterOrders('Entregado')" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all border border-slate-700">Entregadas</button>
+                        <button onclick="filterOrders('todos')" data-f="todos" class="f-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all">Todos</button>
+                        <button onclick="filterOrders('Pendiente')" data-f="Pendiente" class="f-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all">Pendientes</button>
+                        <button onclick="filterOrders('Confirmado')" data-f="Confirmado" class="f-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all">En Elaboración</button>
+                        <button onclick="filterOrders('Entregado')" data-f="Entregado" class="f-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all">Entregados</button>
                     </div>
                 </div>
-
-                <div id="orders-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                <div id="orders-cards-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
             </section>
 
-            <!-- GESTIÓN PRODUCTOS -->
-            <section class="space-y-6 pt-8 border-t border-slate-800">
-                <div class="flex justify-between items-center">
+            <!-- PRODUCTOS -->
+            <section id="sec-productos" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                     <div>
-                        <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-boxes-stacked text-shely"></i> Catálogo de Productos</h2>
-                        <p class="text-xs text-slate-400">Controla stock y visibilidad.</p>
+                        <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-boxes-stacked text-rose-400"></i> Productos de <span id="prod-biz-name"></span></h2>
+                        <p class="text-xs text-slate-400">Controla precios, stock y visibilidad en la tienda.</p>
                     </div>
-                    <button onclick="openProductModal()" class="bg-shely hover:bg-shely-dark text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all shadow-lg flex items-center gap-2"><i class="fa-solid fa-plus"></i> Nuevo</button>
+                    <button onclick="openProductModal()" class="bg-rose-500 hover:bg-rose-600 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all shadow-lg flex items-center gap-2"><i class="fa-solid fa-plus"></i> Nuevo producto</button>
                 </div>
-
                 <div class="bg-slate-800 border border-slate-700 rounded-3xl overflow-hidden shadow-xl">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                        <table class="w-full text-left border-collapse min-w-[640px]">
                             <thead>
                                 <tr class="border-b border-slate-700 text-xs uppercase font-semibold text-slate-400">
-                                    <th class="py-4 px-6">Producto</th><th class="py-4 px-6">Categoría / Precio</th><th class="py-4 px-6">Stock</th><th class="py-4 px-6">Visibilidad</th><th class="py-4 px-6 text-right">Acciones</th>
+                                    <th class="py-4 px-6">Producto</th><th class="py-4 px-6">Categoría</th><th class="py-4 px-6">Precio</th><th class="py-4 px-6">Stock</th><th class="py-4 px-6">Visibilidad</th><th class="py-4 px-6 text-right">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-product-table" class="divide-y divide-slate-700/50 text-sm"></tbody>
@@ -98,20 +111,53 @@
                     </div>
                 </div>
             </section>
+
+            <!-- DATOS DEL NEGOCIO -->
+            <section id="sec-negocio" class="hidden space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-store text-rose-400"></i> Datos de <span id="biz-data-name"></span></h2>
+                    <p class="text-xs text-slate-400">Esta información aparece en la página, en los tickets y en los mensajes de WhatsApp. Los cambios se ven al recargar la tienda.</p>
+                </div>
+                <form onsubmit="saveBusiness(event)" class="bg-slate-800 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl">
+                    <div class="md:col-span-2"><label class="lbl">Nombre del negocio</label><input type="text" id="b-name" required class="inp"></div>
+                    <div><label class="lbl">WhatsApp de pedidos (con lada 52)</label><input type="tel" id="b-whatsapp" required pattern="[0-9]{12}" title="Formato: 52 + 10 dígitos" placeholder="526624154024" class="inp"></div>
+                    <div><label class="lbl">Prefijo de folio (2-3 letras)</label><input type="text" id="b-prefix" required maxlength="3" class="inp uppercase"></div>
+                    <div class="md:col-span-2"><label class="lbl">CLABE para anticipos (18 dígitos)</label><input type="text" id="b-clabe" required pattern="[0-9]{18}" title="18 dígitos" class="inp"></div>
+                    <div class="md:col-span-2"><label class="lbl">Categorías (separadas por coma)</label><input type="text" id="b-categories" required placeholder="Ramos, Arreglos, Rosas" class="inp"></div>
+                    <div class="md:col-span-2 flex justify-end"><button type="submit" class="bg-rose-500 hover:bg-rose-600 text-white font-semibold px-6 py-3 rounded-xl text-sm shadow-lg transition-all"><i class="fa-solid fa-floppy-disk"></i> Guardar datos</button></div>
+                </form>
+            </section>
+
+            <!-- CLAVES -->
+            <section id="sec-claves" class="hidden space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-key text-rose-400"></i> Claves de acceso al panel</h2>
+                    <p class="text-xs text-slate-400">Cambia el usuario y la contraseña con la que entras a este panel. Aplica a ambos negocios.</p>
+                </div>
+                <form onsubmit="saveCredentials(event)" class="bg-slate-800 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl">
+                    <div class="md:col-span-2"><label class="lbl">Usuario nuevo</label><input type="text" id="c-user" required class="inp"></div>
+                    <div><label class="lbl">Contraseña nueva</label><input type="password" id="c-new" required minlength="5" class="inp"></div>
+                    <div><label class="lbl">Confirmar contraseña</label><input type="password" id="c-confirm" required minlength="5" class="inp"></div>
+                    <div class="md:col-span-2 pt-2 border-t border-slate-700"><label class="lbl">Contraseña actual (para confirmar)</label><input type="password" id="c-current" required class="inp"></div>
+                    <div class="md:col-span-2 flex justify-end"><button type="submit" class="bg-rose-500 hover:bg-rose-600 text-white font-semibold px-6 py-3 rounded-xl text-sm shadow-lg transition-all"><i class="fa-solid fa-shield-halved"></i> Actualizar claves</button></div>
+                </form>
+            </section>
         </main>
+
+        <footer class="bg-slate-800 border-t border-slate-700 py-6 text-center text-xs text-slate-400">
+            <p>Shely • Panel de Control Administrativo 2026 • FV DIGITAL HMO</p>
+        </footer>
     </div>
 
-    <!-- MODAL DETALLE ORDEN (FORMATO FACTURA / TICKET PROFESIONAL) -->
-    <div id="order-invoice-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white text-slate-800 rounded-3xl max-w-lg w-full p-8 shadow-2xl space-y-6 relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closeInvoiceModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
-            
+    <!-- MODAL TICKET -->
+    <div id="invoice-modal" class="modal-wrap">
+        <div class="modal-box bg-white text-slate-800 rounded-3xl max-w-lg w-full p-8 shadow-2xl space-y-6 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('invoice-modal')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
             <div class="text-center pb-4 border-b border-slate-200 space-y-1">
-                <h3 class="text-2xl font-black text-slate-900">Florería Shely</h3>
-                <p class="text-xs text-slate-500">Hermosillo, Sonora | Tel: +52 662 415 4024</p>
-                <div class="inline-block bg-rose-100 text-shely px-3 py-1 rounded-full text-xs font-bold mt-2" id="inv-folio"></div>
+                <h3 id="inv-biz" class="text-2xl font-black text-slate-900"></h3>
+                <p id="inv-contact" class="text-xs text-slate-500"></p>
+                <div class="inline-block bg-rose-100 text-rose-600 px-3 py-1 rounded-full text-xs font-bold mt-2" id="inv-folio"></div>
             </div>
-
             <div class="grid grid-cols-2 gap-4 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-100">
                 <div>
                     <span class="text-slate-400 uppercase font-bold block">Cliente</span>
@@ -119,201 +165,340 @@
                     <p class="text-slate-600" id="inv-client-phone"></p>
                 </div>
                 <div>
-                    <span class="text-slate-400 uppercase font-bold block">Fecha Entrega</span>
+                    <span class="text-slate-400 uppercase font-bold block">Fecha de entrega</span>
                     <strong class="text-slate-900 text-sm" id="inv-date"></strong>
                     <p class="text-slate-600" id="inv-address"></p>
                 </div>
             </div>
-
             <div class="space-y-2">
-                <span class="text-xs uppercase font-bold text-slate-400 block">Detalle de Artículos</span>
+                <span class="text-xs uppercase font-bold text-slate-400 block">Detalle</span>
                 <div id="inv-items-table" class="space-y-2"></div>
             </div>
-
             <div class="bg-slate-900 text-white p-4 rounded-2xl space-y-1 text-xs">
-                <p><strong>Dedicatoria:</strong> <span id="inv-note" class="italic text-slate-300"></span></p>
-                <div class="flex justify-between pt-2 border-t border-slate-800 text-sm font-bold">
-                    <span>Total:</span><span id="inv-total" class="text-rose-400"></span>
-                </div>
-                <div class="flex justify-between text-xs text-slate-400">
-                    <span>Anticipo Requerido (50%):</span><span id="inv-anticipo"></span>
-                </div>
+                <p><strong>Dedicatoria / detalle:</strong> <span id="inv-note" class="italic text-slate-300"></span></p>
+                <div class="flex justify-between pt-2 border-t border-slate-800 text-sm font-bold"><span>Total:</span><span id="inv-total" class="text-rose-400"></span></div>
+                <div class="flex justify-between text-xs text-slate-400"><span>Anticipo (50%):</span><span id="inv-anticipo"></span></div>
             </div>
-
-            <button onclick="closeInvoiceModal()" class="w-full py-3 bg-slate-900 text-white rounded-xl font-semibold text-sm">Cerrar Ticket</button>
+            <button onclick="closeModal('invoice-modal')" class="w-full py-3 bg-slate-900 text-white rounded-xl font-semibold text-sm">Cerrar ticket</button>
         </div>
     </div>
 
     <!-- MODAL PRODUCTO -->
-    <div id="product-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-6">
-            <div class="flex justify-between items-center"><h3 id="modal-title" class="text-xl font-bold">Producto</h3><button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-slate-700 text-slate-300 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button></div>
+    <div id="product-modal" class="modal-wrap">
+        <div class="modal-box bg-slate-800 border border-slate-700 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center"><h3 id="modal-title" class="text-xl font-bold">Producto</h3><button onclick="closeModal('product-modal')" class="w-8 h-8 rounded-full bg-slate-700 text-slate-300 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button></div>
             <form id="product-form" onsubmit="saveProduct(event)" class="space-y-4">
                 <input type="hidden" id="p-id">
-                <div><label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre</label><input type="text" id="p-name" required class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm outline-none"></div>
+                <div><label class="lbl">Nombre</label><input type="text" id="p-name" required class="inp"></div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Categoría</label><select id="p-category" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm outline-none"><option value="Ramos">Ramos</option><option value="Arreglos">Arreglos</option><option value="Rosas">Rosas</option></select></div>
-                    <div><label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Precio ($)</label><input type="number" id="p-price" required min="1" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm outline-none"></div>
+                    <div><label class="lbl">Categoría</label><select id="p-category" class="inp"></select></div>
+                    <div><label class="lbl">Precio ($ MXN)</label><input type="number" id="p-price" required min="1" step="0.01" class="inp"></div>
                 </div>
-                <div><label class="block text-xs font-semibold uppercase text-slate-400 mb-1">URL Imagen</label><input type="url" id="p-image" required class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm outline-none"></div>
+                <div><label class="lbl">URL de imagen</label><input type="url" id="p-image" required class="inp"></div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Stock</label><select id="p-status" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm outline-none"><option value="Disponible">Disponible</option><option value="Agotado">Agotado</option></select></div>
-                    <div><label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Visibilidad</label><select id="p-hidden" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm outline-none"><option value="false">Visible</option><option value="true">Oculto</option></select></div>
+                    <div><label class="lbl">Stock</label><select id="p-status" class="inp"><option value="Disponible">Disponible</option><option value="Agotado">Agotado</option></select></div>
+                    <div><label class="lbl">Visibilidad</label><select id="p-hidden" class="inp"><option value="false">Visible</option><option value="true">Oculto</option></select></div>
                 </div>
-                <div><label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Descripción</label><textarea id="p-desc" rows="2" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm outline-none"></textarea></div>
-                <button type="submit" class="w-full py-3 bg-shely hover:bg-shely-dark text-white rounded-xl font-semibold text-sm">Guardar</button>
+                <div><label class="lbl">Descripción</label><textarea id="p-desc" rows="2" class="inp"></textarea></div>
+                <button type="submit" class="w-full py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-semibold text-sm">Guardar producto</button>
             </form>
         </div>
     </div>
 
-    <footer class="bg-slate-800 border-t border-slate-700 py-8 text-center text-xs text-slate-400">
-        <p>Florería Shely • Panel de Control Administrativo 2026</p>
-    </footer>
-
     <!-- SCRIPT ADMIN -->
     <script>
-        let products = JSON.parse(localStorage.getItem('shely_products')) || [];
-        let orders = JSON.parse(localStorage.getItem('shely_orders')) || [];
-        let currentFilter = 'todos';
+        const $ = id => document.getElementById(id);
+        const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
+        const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+        const money = n => `$${Number(n).toLocaleString('es-MX')} MXN`;
+
+        const BIZ = {
+            floreria: {
+                icon: 'fa-seedling', grad: 'biz-grad-floreria', storageKey: 'shely_products', emoji: '🌸',
+                defaults: { name: 'Florería Shely', prefix: 'FS', whatsapp: '526624154024', clabe: '012180001234567890', categories: ['Ramos', 'Arreglos', 'Rosas'] }
+            },
+            pasteleria: {
+                icon: 'fa-cake-candles', grad: 'biz-grad-pasteleria', storageKey: 'pasteleria_products', emoji: '🎂',
+                defaults: { name: 'Pastelería Shely', prefix: 'PS', whatsapp: '526624154024', clabe: '012180001234567890', categories: ['Pasteles', 'Cupcakes', 'Galletas', 'Postres'] }
+            }
+        };
+
+        let auth = read('shely_admin_auth', { user: 'admin', pass: '12345' });
+        let current = 'floreria';
+        let section = 'pedidos';
+        let filter = 'todos';
+        let orders = [];
+        let products = [];
+
+        const cfg = id => ({ ...BIZ[id].defaults, ...read('shely_settings_' + id, {}) });
+        const bizOf = o => o.businessId || 'floreria';
 
         function handleLogin(e) {
             e.preventDefault();
-            if(document.getElementById('login-user').value === 'admin' && document.getElementById('login-pass').value === '12345') {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('admin-panel').classList.remove('hidden');
-                renderOrders(); renderAdminProducts();
-            } else { alert('Credenciales incorrectas'); }
+            if ($('login-user').value === auth.user && $('login-pass').value === auth.pass) {
+                $('login-screen').classList.add('hidden');
+                $('admin-panel').classList.remove('hidden');
+                loadAll();
+                setSection('pedidos');
+            } else {
+                alert('Credenciales incorrectas');
+            }
         }
-        function logout() { document.getElementById('admin-panel').classList.add('hidden'); document.getElementById('login-screen').classList.remove('hidden'); }
-        function saveStorage() { localStorage.setItem('shely_products', JSON.stringify(products)); localStorage.setItem('shely_orders', JSON.stringify(orders)); }
+        function logout() {
+            $('admin-panel').classList.add('hidden');
+            $('login-screen').classList.remove('hidden');
+            $('login-pass').value = '';
+        }
 
-        function filterOrders(status) {
-            currentFilter = status;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                if(btn.textContent.toLowerCase().includes(status.toLowerCase()) || (status === 'todos' && btn.textContent === 'Todas')) {
-                    btn.className = "filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-shely text-white transition-all";
-                } else {
-                    btn.className = "filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all border border-slate-700";
-                }
+        function loadAll() {
+            orders = read('shely_orders', []);
+            products = read(BIZ[current].storageKey, []);
+            renderBizTabs();
+        }
+
+        function setBiz(id) {
+            current = id;
+            filter = 'todos';
+            loadAll();
+            renderSection();
+        }
+
+        function setSection(s) {
+            section = s;
+            loadAll();
+            renderSection();
+        }
+
+        function renderSection() {
+            ['pedidos', 'productos', 'negocio', 'claves'].forEach(s => $('sec-' + s).classList.toggle('hidden', s !== section));
+            document.querySelectorAll('.sec-btn').forEach(b => {
+                b.className = 'sec-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ' +
+                    (b.dataset.sec === section ? 'bg-rose-500 text-white shadow-lg' : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700');
             });
-            renderOrders();
+            const name = cfg(current).name;
+            $('orders-biz-name').textContent = name;
+            $('prod-biz-name').textContent = name;
+            $('biz-data-name').textContent = name;
+            if (section === 'pedidos') { filterOrders(filter, true); }
+            if (section === 'productos') renderProducts();
+            if (section === 'negocio') fillBusinessForm();
+            if (section === 'claves') $('c-user').value = auth.user;
+        }
+
+        function renderBizTabs() {
+            $('biz-tabs').innerHTML = Object.keys(BIZ).map(id => {
+                const c = cfg(id);
+                const pend = read('shely_orders', []).filter(o => bizOf(o) === id && o.status === 'Pendiente').length;
+                const on = id === current;
+                return `
+                <button onclick="setBiz('${id}')" class="flex-1 flex items-center gap-4 p-5 rounded-2xl border transition-all duration-300 hover:-translate-y-0.5 text-left ${on ? 'bg-slate-800 border-rose-500 shadow-xl shadow-rose-950/40' : 'bg-slate-800/50 border-slate-700 hover:bg-slate-800'}">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg ${BIZ[id].grad}"><i class="fa-solid ${BIZ[id].icon}"></i></div>
+                    <div class="flex-grow">
+                        <p class="font-bold text-lg">${esc(c.name)}</p>
+                        <p class="text-xs text-slate-400">${pend} pedido(s) pendiente(s) • ${on ? 'Seleccionado' : 'Clic para administrar'}</p>
+                    </div>
+                    ${on ? '<i class="fa-solid fa-circle-check text-rose-400 text-xl"></i>' : ''}
+                </button>`;
+            }).join('');
+        }
+
+        function filterOrders(status, silent) {
+            filter = status;
+            document.querySelectorAll('.f-btn').forEach(b => {
+                b.className = 'f-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all ' +
+                    (b.dataset.f === status ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700');
+            });
+            if (!silent) renderSection();
+            else renderOrders();
         }
 
         function renderOrders() {
-            const grid = document.getElementById('orders-cards-grid');
-            grid.innerHTML = '';
-            const filtered = currentFilter === 'todos' ? orders : orders.filter(o => o.status === currentFilter);
-
-            if(filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 bg-slate-800/50 rounded-3xl border border-slate-700"><p>No hay órdenes en esta sección.</p></div>`;
+            orders = read('shely_orders', []);
+            const grid = $('orders-cards-grid');
+            const list = orders.filter(o => bizOf(o) === current && (filter === 'todos' || o.status === filter));
+            if (!list.length) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 bg-slate-800/50 rounded-3xl border border-slate-700"><i class="fa-solid fa-inbox text-3xl mb-2"></i><p>No hay pedidos en esta sección.</p></div>`;
                 return;
             }
-
-            filtered.forEach(o => {
-                let badge = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-                if(o.status === 'Confirmado') badge = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-                if(o.status === 'Entregado') badge = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-
-                const card = document.createElement('div');
-                card.className = "bg-slate-800 border border-slate-700 rounded-3xl p-6 shadow-xl flex flex-col justify-between space-y-4";
-                card.innerHTML = `
+            const badge = { Pendiente: 'bg-amber-500/20 text-amber-400 border-amber-500/30', Confirmado: 'bg-blue-500/20 text-blue-400 border-blue-500/30', Entregado: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' };
+            grid.innerHTML = list.map(o => `
+                <div class="fade-in bg-slate-800 border border-slate-700 rounded-3xl p-6 shadow-xl flex flex-col justify-between space-y-4 hover:-translate-y-1 transition-all">
                     <div class="flex justify-between items-start pb-4 border-b border-slate-700">
                         <div>
-                            <span class="text-xs font-mono text-rose-400 font-bold">${o.folio}</span>
-                            <h3 class="font-bold text-lg text-white">${o.customer.name}</h3>
-                            <a href="https://wa.me/52${o.customer.phone}" target="_blank" class="text-xs text-emerald-400 hover:underline"><i class="fa-brands fa-whatsapp"></i> ${o.customer.phone}</a>
+                            <span class="text-xs font-mono text-rose-400 font-bold">${esc(o.folio)}</span>
+                            <span class="ml-2 text-[10px] uppercase font-bold text-amber-300">${esc(o.type || 'Pedido')}</span>
+                            <h3 class="font-bold text-lg text-white">${esc(o.customer.name)}</h3>
+                            <a href="https://wa.me/52${esc(o.customer.phone)}" target="_blank" class="text-xs text-emerald-400 hover:underline"><i class="fa-brands fa-whatsapp"></i> ${esc(o.customer.phone)}</a>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-xs font-bold border ${badge}">${o.status}</span>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold border ${badge[o.status] || badge.Pendiente}">${esc(o.status)}</span>
                     </div>
                     <div class="text-xs text-slate-300 space-y-1">
-                        <p><strong>Entrega:</strong> ${o.customer.date} a las ${o.customer.time} hrs</p>
-                        <p><strong>Total:</strong> $${o.total} MXN (Anticipo: $${o.anticipo})</p>
+                        <p><strong>Entrega:</strong> ${esc(o.customer.date)} ${o.customer.time ? 'a las ' + esc(o.customer.time) + ' hrs' : ''}</p>
+                        <p><strong>Detalle:</strong> ${esc(o.items.map(i => `${i.qty}x ${i.name}`).join(', '))}</p>
+                        <p><strong>Total:</strong> ${o.custom ? 'Por cotizar' : `${money(o.total)} (Anticipo: ${money(o.anticipo)})`}</p>
                     </div>
                     <div class="space-y-2 pt-2">
                         <div class="flex gap-2">
-                            <select onchange="updateOrderStatus('${o.folio}', this.value)" class="w-full bg-slate-900 border border-slate-700 text-xs rounded-xl p-2.5 font-semibold text-slate-300 outline-none">
-                                <option value="" disabled selected>Estatus...</option>
+                            <select onchange="updateOrderStatus('${esc(o.folio)}', this.value)" class="w-full bg-slate-900 border border-slate-700 text-xs rounded-xl p-2.5 font-semibold text-slate-300 outline-none">
+                                <option value="" disabled selected>Cambiar estatus...</option>
                                 <option value="Pendiente">Pendiente</option>
                                 <option value="Confirmado">En Elaboración</option>
                                 <option value="Entregado">Entregado</option>
                             </select>
-                            <button onclick="openInvoice('${o.folio}')" class="p-2.5 bg-slate-700 text-slate-200 rounded-xl hover:bg-slate-600" title="Ver Ticket"><i class="fa-solid fa-file-invoice text-xs"></i></button>
-                            <button onclick="deleteOrder('${o.folio}')" class="p-2.5 bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white rounded-xl"><i class="fa-solid fa-trash text-xs"></i></button>
+                            <button onclick="openInvoice('${esc(o.folio)}')" class="p-2.5 bg-slate-700 text-slate-200 rounded-xl hover:bg-slate-600" title="Ver ticket"><i class="fa-solid fa-file-invoice text-xs"></i></button>
+                            <button onclick="deleteOrder('${esc(o.folio)}')" class="p-2.5 bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white rounded-xl" title="Eliminar"><i class="fa-solid fa-trash text-xs"></i></button>
                         </div>
-                        <button onclick="sendWhatsApp('${o.folio}', '${o.customer.phone}', '${o.customer.name}', '${o.status}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold text-xs transition-all flex items-center justify-center gap-2 shadow-md">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> Enviar WhatsApp de Estatus
+                        <button onclick="sendWhatsApp('${esc(o.folio)}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold text-xs transition-all flex items-center justify-center gap-2 shadow-md">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Enviar WhatsApp de estatus
                         </button>
                     </div>
-                `;
-                grid.appendChild(card);
-            });
+                </div>`).join('');
+        }
+
+        function updateOrderStatus(folio, val) {
+            const all = read('shely_orders', []);
+            write('shely_orders', all.map(o => o.folio === folio ? { ...o, status: val } : o));
+            renderBizTabs();
+            renderOrders();
+        }
+        function deleteOrder(folio) {
+            if (!confirm('¿Eliminar este pedido?')) return;
+            write('shely_orders', read('shely_orders', []).filter(o => o.folio !== folio));
+            renderBizTabs();
+            renderOrders();
         }
 
         function openInvoice(folio) {
-            const o = orders.find(item => item.folio === folio);
-            if(!o) return;
-            document.getElementById('inv-folio').textContent = o.folio;
-            document.getElementById('inv-client-name').textContent = o.customer.name;
-            document.getElementById('inv-client-phone').textContent = o.customer.phone;
-            document.getElementById('inv-date').textContent = `${o.customer.date} (${o.customer.time})`;
-            document.getElementById('inv-address').textContent = o.customer.address;
-            document.getElementById('inv-note').textContent = o.customer.note;
-            document.getElementById('inv-total').textContent = `$${o.total} MXN`;
-            document.getElementById('inv-anticipo').textContent = `$${o.anticipo} MXN`;
-
-            const table = document.getElementById('inv-items-table');
-            table.innerHTML = o.items.map(i => `<div class="flex justify-between text-xs py-1 border-b border-slate-100"><span>${i.qty}x ${i.name}</span><strong class="text-slate-900">$${i.price * i.qty}</strong></div>`).join('');
-            document.getElementById('order-invoice-modal').classList.remove('hidden');
-        }
-        function closeInvoiceModal() { document.getElementById('order-invoice-modal').classList.add('hidden'); }
-
-        function updateOrderStatus(folio, val) { orders = orders.map(o => o.folio === folio ? { ...o, status: val } : o); saveStorage(); renderOrders(); }
-        function deleteOrder(folio) { if(confirm('¿Eliminar orden?')) { orders = orders.filter(o => o.folio !== folio); saveStorage(); renderOrders(); } }
-
-        function sendWhatsApp(folio, phone, name, status) {
-            let msg = `¡Hola ${name}! Te saludamos de *Florería Shely* 🌸. Tu pedido *${folio}* está en estatus: *${status}*.`;
-            if(status === 'Confirmado') msg = `¡Hola ${name}! Recibimos tu anticipo. Tu pedido *${folio}* ha sido *Confirmado* y ya estamos elaborándolo. ¡Gracias!`;
-            if(status === 'Entregado') msg = `¡Hola ${name}! Tu pedido *${folio}* ha sido *Entregado con éxito*. ¡Esperamos que te encante!`;
-            window.open(`https://wa.me/52${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+            const o = read('shely_orders', []).find(x => x.folio === folio);
+            if (!o) return;
+            const c = cfg(bizOf(o));
+            $('inv-biz').textContent = c.name;
+            $('inv-contact').textContent = `Tel: +52 ${c.whatsapp.slice(2)}`;
+            $('inv-folio').textContent = `${o.folio} • ${o.type || 'Pedido'}`;
+            $('inv-client-name').textContent = o.customer.name;
+            $('inv-client-phone').textContent = o.customer.phone;
+            $('inv-date').textContent = `${o.customer.date} ${o.customer.time ? '(' + o.customer.time + ')' : ''}`;
+            $('inv-address').textContent = o.customer.address;
+            $('inv-note').textContent = o.customer.note;
+            $('inv-total').textContent = o.custom ? 'Por cotizar' : money(o.total);
+            $('inv-anticipo').textContent = o.custom ? '—' : money(o.anticipo);
+            $('inv-items-table').innerHTML = o.items.map(i => `<div class="flex justify-between text-xs py-1 border-b border-slate-100"><span>${i.qty}x ${esc(i.name)}</span><strong class="text-slate-900">${i.price ? money(i.price * i.qty) : '—'}</strong></div>`).join('');
+            showModal('invoice-modal');
         }
 
-        function renderAdminProducts() {
-            const tbody = document.getElementById('admin-product-table');
+        function sendWhatsApp(folio) {
+            const o = read('shely_orders', []).find(x => x.folio === folio);
+            if (!o) return;
+            const name = cfg(bizOf(o)).name;
+            const n = o.customer.name, f = o.folio, s = o.status;
+            let msg = `¡Hola ${n}! Te saludamos de *${name}*. Tu pedido *${f}* está en estatus: *${s}*.`;
+            if (s === 'Confirmado') msg = `¡Hola ${n}! Recibimos tu anticipo. Tu pedido *${f}* ha sido *confirmado* y ya estamos elaborándolo. ¡Gracias!`;
+            if (s === 'Entregado') msg = `¡Hola ${n}! Tu pedido *${f}* ha sido *entregado con éxito*. ¡Esperamos que te encante! 🎉`;
+            if (o.custom && s === 'Pendiente') msg = `¡Hola ${n}! Recibimos tu solicitud personalizada *${f}* en *${name}*. Te enviaremos tu cotización en breve.`;
+            window.open(`https://wa.me/52${o.customer.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function renderProducts() {
+            const tbody = $('admin-product-table');
+            if (!products.length) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-slate-500">Sin productos. Agrega el primero con "Nuevo producto".</td></tr>`;
+                return;
+            }
             tbody.innerHTML = products.map(p => `
                 <tr class="hover:bg-slate-700/30 transition-all">
-                    <td class="py-4 px-6 flex items-center gap-3"><img src="${p.image}" class="w-10 h-10 rounded-xl object-cover"><div><span class="font-bold text-white block">${p.name}</span><span class="text-xs text-slate-400">${p.category}</span></div></td>
-                    <td class="py-4 px-6 font-bold text-white">$${p.price} MXN</td>
-                    <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-bold ${p.status==='Agotado'?'bg-rose-500/20 text-rose-400':'bg-emerald-500/20 text-emerald-400'}">${p.status}</span></td>
-                    <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-bold ${p.hidden?'bg-amber-500/20 text-amber-400':'bg-blue-500/20 text-blue-400'}">${p.hidden?'Oculto':'Visible'}</span></td>
-                    <td class="py-4 px-6 text-right space-x-2"><button onclick="openProductModal(${p.id})" class="p-2 bg-slate-700 text-slate-300 rounded-xl"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="deleteProduct(${p.id})" class="p-2 bg-rose-500/20 text-rose-400 rounded-xl"><i class="fa-solid fa-trash text-xs"></i></button></td>
+                    <td class="py-4 px-6"><div class="flex items-center gap-3"><img src="${esc(p.image)}" class="w-10 h-10 rounded-xl object-cover bg-slate-700" onerror="this.style.visibility='hidden'"><span class="font-bold text-white">${esc(p.name)}</span></div></td>
+                    <td class="py-4 px-6 text-xs text-slate-400">${esc(p.category)}</td>
+                    <td class="py-4 px-6 font-bold text-white">${money(p.price)}</td>
+                    <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-bold ${p.status === 'Agotado' ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'}">${esc(p.status)}</span></td>
+                    <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-bold ${p.hidden ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}">${p.hidden ? 'Oculto' : 'Visible'}</span></td>
+                    <td class="py-4 px-6 text-right space-x-2"><button onclick="openProductModal(${p.id})" class="p-2 bg-slate-700 text-slate-300 rounded-xl hover:bg-slate-600"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="deleteProduct(${p.id})" class="p-2 bg-rose-500/20 text-rose-400 rounded-xl hover:bg-rose-500 hover:text-white"><i class="fa-solid fa-trash text-xs"></i></button></td>
                 </tr>`).join('');
         }
 
-        function openProductModal(id=null) {
-            document.getElementById('product-modal').classList.remove('hidden');
-            if(id) {
+        function openProductModal(id = null) {
+            const c = cfg(current);
+            $('p-category').innerHTML = c.categories.map(x => `<option>${esc(x)}</option>`).join('');
+            $('product-form').reset();
+            $('p-id').value = '';
+            $('modal-title').textContent = id ? 'Editar producto' : 'Nuevo producto';
+            if (id) {
                 const p = products.find(i => i.id === id);
-                document.getElementById('p-id').value = p.id; document.getElementById('p-name').value = p.name;
-                document.getElementById('p-category').value = p.category; document.getElementById('p-price').value = p.price;
-                document.getElementById('p-image').value = p.image; document.getElementById('p-status').value = p.status;
-                document.getElementById('p-hidden').value = p.hidden; document.getElementById('p-desc').value = p.description;
-            } else { document.getElementById('product-form').reset(); document.getElementById('p-id').value=''; }
+                $('p-id').value = p.id;
+                $('p-name').value = p.name;
+                $('p-category').value = p.category;
+                $('p-price').value = p.price;
+                $('p-image').value = p.image;
+                $('p-status').value = p.status;
+                $('p-hidden').value = String(p.hidden);
+                $('p-desc').value = p.description;
+            }
+            showModal('product-modal');
         }
-        function closeProductModal() { document.getElementById('product-modal').classList.add('hidden'); }
+
         function saveProduct(e) {
             e.preventDefault();
-            const id = document.getElementById('p-id').value;
+            const id = $('p-id').value;
+            const all = read(BIZ[current].storageKey, []);
             const data = {
-                id: id ? Number(id) : (products.length > 0 ? Math.max(...products.map(p=>p.id))+1 : 1),
-                name: document.getElementById('p-name').value, category: document.getElementById('p-category').value,
-                price: parseFloat(document.getElementById('p-price').value), image: document.getElementById('p-image').value,
-                status: document.getElementById('p-status').value, hidden: document.getElementById('p-hidden').value === 'true',
-                description: document.getElementById('p-desc').value
+                id: id ? Number(id) : (all.length ? Math.max(...all.map(p => p.id)) + 1 : 1),
+                name: $('p-name').value.trim(),
+                category: $('p-category').value,
+                price: parseFloat($('p-price').value),
+                image: $('p-image').value.trim(),
+                status: $('p-status').value,
+                hidden: $('p-hidden').value === 'true',
+                description: $('p-desc').value.trim()
             };
-            if(id) products = products.map(p => p.id == id ? data : p); else products.push(data);
-            saveStorage(); closeProductModal(); renderAdminProducts();
+            const next = id ? all.map(p => p.id === data.id ? data : p) : [...all, data];
+            write(BIZ[current].storageKey, next);
+            closeModal('product-modal');
+            loadAll();
+            renderProducts();
         }
-        function deleteProduct(id) { if(confirm('¿Eliminar?')) { products = products.filter(p => p.id !== id); saveStorage(); renderAdminProducts(); } }
+
+        function deleteProduct(id) {
+            if (!confirm('¿Eliminar este producto?')) return;
+            write(BIZ[current].storageKey, read(BIZ[current].storageKey, []).filter(p => p.id !== id));
+            loadAll();
+            renderProducts();
+        }
+
+        function fillBusinessForm() {
+            const c = cfg(current);
+            $('b-name').value = c.name;
+            $('b-whatsapp').value = c.whatsapp;
+            $('b-prefix').value = c.prefix;
+            $('b-clabe').value = c.clabe;
+            $('b-categories').value = c.categories.join(', ');
+        }
+
+        function saveBusiness(e) {
+            e.preventDefault();
+            write('shely_settings_' + current, {
+                name: $('b-name').value.trim(),
+                whatsapp: $('b-whatsapp').value.trim(),
+                prefix: $('b-prefix').value.trim().toUpperCase(),
+                clabe: $('b-clabe').value.trim(),
+                categories: $('b-categories').value.split(',').map(s => s.trim()).filter(Boolean)
+            });
+            alert('Datos guardados. Recarga la tienda para ver los cambios.');
+            renderSection();
+        }
+
+        function saveCredentials(e) {
+            e.preventDefault();
+            if ($('c-current').value !== auth.pass) return alert('La contraseña actual no es correcta.');
+            if ($('c-new').value !== $('c-confirm').value) return alert('Las contraseñas nuevas no coinciden.');
+            auth = { user: $('c-user').value.trim(), pass: $('c-new').value };
+            write('shely_admin_auth', auth);
+            $('c-current').value = $('c-new').value = $('c-confirm').value = '';
+            alert('Claves actualizadas. Usa las nuevas la próxima vez que entres.');
+        }
+
+        function showModal(id) { $(id).classList.add('open'); }
+        function closeModal(id) { $(id).classList.remove('open'); }
+        document.querySelectorAll('.modal-wrap').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); }));
     </script>
 </body>
 </html>

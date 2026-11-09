@@ -3,533 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Florería Shely | Catálogo Exclusivo en Línea</title>
+    <title>Shely | Flores y Pasteles para cada momento</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { shely: { light: '#fdf2f4', DEFAULT: '#e35d6a', dark: '#bc3b47', accent: '#f497a1' } }
-                }
-            }
-        }
-    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shely.css">
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col overflow-x-hidden">
 
-    <!-- HEADER -->
-    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-rose-100 shadow-sm">
+    <header class="absolute top-0 inset-x-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 bg-gradient-to-tr from-shely to-shely-accent rounded-2xl flex items-center justify-center text-white shadow-md shadow-rose-200">
-                    <i class="fa-solid fa-spa text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold tracking-tight text-slate-900">Florería Shely</h1>
-                    <p class="text-xs text-rose-500 font-medium"><i class="fa-solid fa-phone"></i> +52 662 415 4024</p>
-                </div>
+            <div class="flex items-center gap-3 text-white">
+                <div class="w-11 h-11 bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-heart text-lg"></i></div>
+                <span class="font-extrabold tracking-wide text-lg">SHELY</span>
             </div>
-
-            <!-- Navegación Cliente y Acciones -->
-            <div class="flex items-center space-x-3">
-                <div id="client-nav-area" class="flex items-center gap-2">
-                    <!-- Se llena con JS según sesión -->
-                </div>
-                <button onclick="openCartModal()" class="relative p-2.5 bg-rose-50 text-shely rounded-xl hover:bg-rose-100 transition-all duration-300 hover:scale-105">
-                    <i class="fa-solid fa-bag-shopping text-lg"></i>
-                    <span id="cart-counter" class="absolute -top-1 -right-1 bg-shely text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
-                </button>
-                <a href="admin.html" class="p-2.5 text-slate-400 hover:text-slate-600 rounded-xl transition-all" title="Admin">
-                    <i class="fa-solid fa-lock text-sm"></i>
-                </a>
-            </div>
+            <a href="https://wa.me/526624154024" target="_blank" class="hidden sm:inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white text-xs font-semibold px-4 py-2.5 rounded-xl border border-white/20 transition-all">
+                <i class="fa-brands fa-whatsapp text-emerald-300"></i> +52 662 415 4024
+            </a>
         </div>
     </header>
 
-    <!-- CONTENIDO -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        
-        <!-- Banner -->
-        <div class="relative rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-rose-950 text-white p-8 sm:p-12 overflow-hidden shadow-2xl">
-            <div class="absolute right-0 bottom-0 opacity-10 text-9xl translate-x-10 translate-y-10">
-                <i class="fa-solid fa-seedling"></i>
-            </div>
-            <div class="relative z-10 max-w-xl space-y-4">
-                <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-medium text-rose-200 border border-white/10">
-                    <i class="fa-solid fa-location-dot text-rose-400"></i> Hermosillo, Sonora
-                </span>
-                <h2 class="text-3xl sm:text-5xl font-bold tracking-tight">Elegancia y frescura en cada detalle floral</h2>
-                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">Diseños artesanales para fechas especiales. Inicia sesión con tu teléfono, haz tu pedido y da seguimiento en tiempo real.</p>
-            </div>
+    <section class="relative overflow-hidden text-white pt-32 pb-40 px-4" style="background: linear-gradient(135deg, #1e293b 0%, #4c0519 55%, #7c2d12 100%);">
+        <div class="blob w-96 h-96 bg-rose-400 -top-24 -left-24"></div>
+        <div class="blob w-96 h-96 bg-amber-300 -bottom-24 -right-16" style="animation-delay: -5s"></div>
+        <i class="fa-solid fa-seedling float absolute left-[8%] top-[28%] text-5xl text-white opacity-20"></i>
+        <i class="fa-solid fa-cake-candles float absolute right-[10%] top-[22%] text-6xl text-white opacity-20" style="animation-delay: -2s"></i>
+        <i class="fa-solid fa-heart float absolute left-[20%] bottom-[18%] text-3xl text-white opacity-20" style="animation-delay: -1s"></i>
+
+        <div class="relative z-10 max-w-3xl mx-auto text-center space-y-6 fade-in">
+            <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-semibold border border-white/15 text-rose-200">
+                <i class="fa-solid fa-location-dot"></i> Hermosillo, Sonora
+            </span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+                Bienvenido a <span class="text-gradient">Shely</span>
+            </h1>
+            <p class="text-slate-200 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                Flores que enamoran y pasteles que endulzan tus celebraciones. Elige a dónde quieres ir y disfruta de nuestros pedidos en línea y diseños personalizados.
+            </p>
         </div>
+    </section>
 
-        <!-- Filtros y Buscador -->
-        <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div id="category-filters" class="flex flex-wrap gap-2 w-full md:w-auto">
-                <button onclick="filterCategory('todos')" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-shely text-white transition-all shadow-sm hover:scale-105">Todos</button>
-                <button onclick="filterCategory('Ramos')" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-white text-slate-600 hover:bg-rose-50 transition-all shadow-sm border border-slate-200 hover:scale-105">Ramos</button>
-                <button onclick="filterCategory('Arreglos')" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-white text-slate-600 hover:bg-rose-50 transition-all shadow-sm border border-slate-200 hover:scale-105">Arreglos</button>
-                <button onclick="filterCategory('Rosas')" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-white text-slate-600 hover:bg-rose-50 transition-all shadow-sm border border-slate-200 hover:scale-105">Rosas</button>
-            </div>
-            <div class="relative w-full md:w-80">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" id="search-input" oninput="handleSearch()" placeholder="Buscar arreglo floral..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-shely transition-all shadow-sm">
-            </div>
-        </div>
+    <main class="relative -mt-24 z-10 max-w-6xl w-full mx-auto px-4 sm:px-6 pb-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-        <!-- Grid de Productos -->
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    </main>
-
-    <!-- MODAL LOGIN / REGISTRO CLIENTE -->
-    <div id="client-login-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl fade-in space-y-6 border border-rose-100">
-            <div class="text-center space-y-2">
-                <div class="w-14 h-14 bg-shely text-white rounded-2xl mx-auto flex items-center justify-center text-xl shadow-md">
-                    <i class="fa-solid fa-user-check"></i>
+            <a href="floreria.html" class="reveal group relative overflow-hidden rounded-[2rem] bg-white shadow-2xl border border-rose-100 lift flex flex-col">
+                <div class="relative h-56 overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, #e35d6a, #f497a1);">
+                    <div class="blob w-48 h-48 bg-white -top-12 -left-12"></div>
+                    <i class="fa-solid fa-seedling float text-white text-8xl drop-shadow-lg group-hover:scale-110 transition-transform duration-700"></i>
+                    <span class="absolute top-5 left-5 bg-white/20 backdrop-blur-md text-white text-[11px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-white/30">Florería</span>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900">Identifícate en Florería Shely</h3>
-                <p class="text-xs text-slate-500">Ingresa tus datos para ver tus pedidos o continuar comprando.</p>
-            </div>
-            <form onsubmit="handleClientLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Nombre Completo</label>
-                    <input type="text" id="login-name" required placeholder="Ej. Carlos Mendoza" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-shely outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Número de Teléfono</label>
-                    <input type="tel" id="login-phone" required placeholder="662XXXXXXX" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-shely outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Correo Electrónico (Opcional)</label>
-                    <input type="email" id="login-email" placeholder="correo@ejemplo.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-shely outline-none">
-                </div>
-                <button type="submit" class="w-full py-3 bg-shely hover:bg-shely-dark text-white rounded-xl font-semibold text-sm transition-all shadow-md shadow-rose-200">Continuar</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL MIS PEDIDOS -->
-    <div id="client-orders-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl fade-in max-h-[85vh] overflow-y-auto space-y-6">
-            <div class="flex justify-between items-center pb-4 border-b border-rose-100">
-                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-box-archive text-shely"></i> Mis Pedidos Realizados
-                </h3>
-                <button onclick="closeOrdersModal()" class="w-8 h-8 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center hover:bg-rose-100 transition-all"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div id="client-orders-list" class="space-y-4">
-                <!-- Se llena con JS -->
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL DETALLES PRODUCTO -->
-    <div id="product-detail-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl fade-in relative overflow-hidden">
-            <button onclick="closeProductDetailModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all"><i class="fa-solid fa-xmark"></i></button>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-                <div class="overflow-hidden rounded-2xl h-64 bg-slate-100">
-                    <img id="modal-img" src="" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
-                </div>
-                <div class="space-y-4">
-                    <span id="modal-cat" class="bg-rose-100 text-shely px-3 py-1 rounded-full text-xs font-bold"></span>
-                    <h3 id="modal-name" class="text-xl font-bold text-slate-900"></h3>
-                    <p id="modal-desc" class="text-xs text-slate-500 leading-relaxed"></p>
-                    <div class="text-2xl font-black text-slate-900" id="modal-price"></div>
-                    <div id="modal-status-badge"></div>
-                    <button id="modal-add-btn" onclick="" class="w-full bg-shely hover:bg-shely-dark text-white py-3 rounded-xl font-semibold text-sm transition-all duration-300 shadow-md shadow-rose-200 hover:scale-105 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-bag-shopping"></i> Agregar al Carrito
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL CARRITO & CHECKOUT (AUTOCOMPLETADO) -->
-    <div id="cart-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6 pb-4 border-b border-rose-100">
-                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-cart-shopping text-shely"></i> Carrito & Checkout
-                </h3>
-                <button onclick="closeCartModal()" class="w-8 h-8 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center hover:bg-rose-100 transition-all"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <div id="cart-items-list" class="space-y-3 mb-6 max-h-48 overflow-y-auto pr-1"></div>
-
-            <form id="checkout-form" onsubmit="submitOrder(event)" class="space-y-4 pt-4 border-t border-rose-100">
-                <h4 class="text-xs font-bold uppercase text-slate-400 tracking-wider">Datos de Entrega (Autocompletados)</h4>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre</label>
-                        <input type="text" id="cust-name" required readonly class="w-full px-3.5 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono</label>
-                        <input type="tel" id="cust-phone" required readonly class="w-full px-3.5 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none">
+                <div class="p-8 space-y-4 flex-grow flex flex-col">
+                    <h2 class="text-2xl font-extrabold text-slate-900">Florería Shely</h2>
+                    <p class="text-sm text-slate-500 leading-relaxed">Ramos, arreglos y cajas de rosas para cada ocasión, con entrega a domicilio en Hermosillo.</p>
+                    <ul class="space-y-2 text-sm text-slate-700">
+                        <li><i class="fa-solid fa-circle-check text-rose-500 mr-2"></i>Catálogo en línea y pedidos rápidos</li>
+                        <li><i class="fa-solid fa-circle-check text-rose-500 mr-2"></i>Arreglos personalizados a tu medida</li>
+                        <li><i class="fa-solid fa-circle-check text-rose-500 mr-2"></i>Seguimiento de tu pedido</li>
+                    </ul>
+                    <div class="pt-4 mt-auto">
+                        <span class="inline-flex items-center gap-2 w-full justify-center py-3.5 rounded-2xl text-white font-bold text-sm shadow-lg transition-all group-hover:gap-4" style="background: linear-gradient(135deg, #e35d6a, #bc3b47);">
+                            Entrar a la Florería <i class="fa-solid fa-arrow-right"></i>
+                        </span>
                     </div>
                 </div>
+            </a>
 
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Dirección de Entrega en Hermosillo</label>
-                    <textarea id="cust-address" rows="2" required placeholder="Calle, número, colonia..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-shely outline-none"></textarea>
+            <a href="pasteleria.html" class="reveal group relative overflow-hidden rounded-[2rem] bg-white shadow-2xl border border-pink-100 lift flex flex-col" style="transition-delay: 150ms">
+                <div class="relative h-56 overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, #d9467a, #f9b872);">
+                    <div class="blob w-48 h-48 bg-white -top-12 -right-12"></div>
+                    <i class="fa-solid fa-cake-candles float text-white text-8xl drop-shadow-lg group-hover:scale-110 transition-transform duration-700" style="animation-delay: -2s"></i>
+                    <span class="absolute top-5 left-5 bg-white/20 backdrop-blur-md text-white text-[11px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-white/30">Pastelería</span>
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha de Entrega</label>
-                        <input type="date" id="cust-date" required class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-shely outline-none">
+                <div class="p-8 space-y-4 flex-grow flex flex-col">
+                    <h2 class="text-2xl font-extrabold text-slate-900">Pastelería Shely</h2>
+                    <p class="text-sm text-slate-500 leading-relaxed">Pasteles, cupcakes y postres artesanales. Ideales para cumpleaños, bodas, XV años y más.</p>
+                    <ul class="space-y-2 text-sm text-slate-700">
+                        <li><i class="fa-solid fa-circle-check text-pink-500 mr-2"></i>Catálogo en línea y pedidos rápidos</li>
+                        <li><i class="fa-solid fa-circle-check text-pink-500 mr-2"></i>Pasteles diseñados según tu evento</li>
+                        <li><i class="fa-solid fa-circle-check text-pink-500 mr-2"></i>Seguimiento de tu pedido</li>
+                    </ul>
+                    <div class="pt-4 mt-auto">
+                        <span class="inline-flex items-center gap-2 w-full justify-center py-3.5 rounded-2xl text-white font-bold text-sm shadow-lg transition-all group-hover:gap-4" style="background: linear-gradient(135deg, #d9467a, #b02e5f);">
+                            Entrar a la Pastelería <i class="fa-solid fa-arrow-right"></i>
+                        </span>
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Hora Exacta</label>
-                        <input type="time" id="cust-time" required class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-shely outline-none">
-                    </div>
                 </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Dedicatoria</label>
-                    <input type="text" id="cust-note" placeholder="Ej. ¡Feliz Aniversario!" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-shely outline-none">
-                </div>
-
-                <div class="bg-rose-50 border border-rose-200 rounded-2xl p-4 text-xs text-rose-900 space-y-1">
-                    <p class="font-bold"><i class="fa-solid fa-circle-exclamation text-rose-600"></i> Anticipo del 50% Requerido</p>
-                    <p>BBVA | CLABE: <strong>012180001234567890</strong></p>
-                </div>
-
-                <div class="pt-2 flex items-center justify-between">
-                    <div>
-                        <span class="text-xs text-slate-400 block font-medium">Total</span>
-                        <span id="cart-total" class="text-xl font-extrabold text-slate-950">$0 MXN</span>
-                    </div>
-                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl text-sm font-semibold transition-all shadow-lg shadow-emerald-600/20 flex items-center gap-2">
-                        <i class="fa-solid fa-check"></i> Realizar Pedido
-                    </button>
-                </div>
-            </form>
+            </a>
         </div>
-    </div>
 
-    <!-- MODAL CONFIRMACIÓN ANIMADO -->
-    <div id="custom-alert-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl fade-in border border-rose-100">
-            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl shadow-inner"><i class="fa-solid fa-check"></i></div>
-            <h3 id="alert-title" class="text-xl font-bold text-slate-900">¡Pedido Creado!</h3>
-            <p id="alert-msg" class="text-xs text-slate-500 leading-relaxed"></p>
-            <button onclick="closeCustomAlert()" class="w-full py-3 bg-shely hover:bg-shely-dark text-white rounded-xl font-semibold text-sm transition-all shadow-md">Entendido</button>
-        </div>
-    </div>
-
-    <!-- FOOTER OFICIAL CON FV DIGITAL HMO -->
-    <footer class="bg-white border-t border-slate-200 py-12 mt-16 text-center text-sm text-slate-500 space-y-6">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-            <div>
-                <h4 class="font-bold text-slate-900 text-base mb-2">Florería Shely</h4>
-                <p class="text-xs text-slate-500">Hermosillo, Sonora. Arreglos florales y detalles que enamoran todos los días.</p>
-                <p class="text-xs text-shely font-semibold mt-2"><i class="fa-solid fa-phone"></i> +52 662 415 4024</p>
+        <section class="reveal mt-16 relative overflow-hidden rounded-[2rem] bg-slate-900 text-white p-8 sm:p-12 text-center space-y-6 shadow-2xl">
+            <div class="blob w-72 h-72 bg-emerald-400 -top-20 -right-20"></div>
+            <div class="relative space-y-2">
+                <h3 class="text-2xl sm:text-3xl font-extrabold">¿Necesitas ayuda?</h3>
+                <p class="text-sm text-slate-300">Escríbenos por WhatsApp para cotizar, consultar disponibilidad o resolver cualquier duda.</p>
             </div>
-            <div>
-                <h4 class="font-bold text-slate-900 text-base mb-2">Enlaces Rápidos</h4>
-                <ul class="space-y-1.5 text-xs">
-                    <li><a href="#" class="hover:text-shely transition-all">Catálogo de Ramos</a></li>
-                    <li><a href="admin.html" class="hover:text-shely transition-all">Portal Administrativo</a></li>
-                </ul>
-            </div>
-            <div class="bg-rose-50/60 p-6 rounded-3xl border border-rose-100 space-y-2">
-                <span class="text-[10px] font-bold uppercase text-shely tracking-wider block">Desarrollo Profesional</span>
-                <h4 class="font-bold text-slate-900 text-sm">¿Quieres una página como esta para tu negocio?</h4>
-                <p class="text-xs text-slate-600">Impulsado por <strong>FV DIGITAL HMO</strong>.</p>
-                <a href="https://wa.me/526625374491?text=Hola,%20me%20interesa%20una%20página%20web%20profesional%20con%20sistema%20para%20mi%20negocio." target="_blank" class="inline-block bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md">
-                    <i class="fa-brands fa-whatsapp text-emerald-400 mr-1"></i> Contáctanos: 662 537 4491
+            <div class="relative flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="https://wa.me/526624154024?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20productos%20y%20pedidos.%20%F0%9F%8C%B8" target="_blank" class="inline-flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-600 px-7 py-4 rounded-2xl font-bold text-sm shadow-lg hover:-translate-y-1 transition-all">
+                    <i class="fa-brands fa-whatsapp text-xl"></i> Escribir por WhatsApp
+                </a>
+                <a href="https://wa.me/526624154024?text=%F0%9F%9A%A8%20*URGENCIA*%20%F0%9F%9A%A8%0A%0AHola%2C%20necesito%20atenci%C3%B3n%20*urgente*%20con%20mi%20pedido.%20Por%20favor%2C%20cont%C3%A1cteme%20lo%20antes%20posible." target="_blank" class="pulse-ring inline-flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 px-7 py-4 rounded-2xl font-bold text-sm shadow-lg hover:-translate-y-1 transition-all">
+                    <i class="fa-solid fa-bell"></i> Mensaje de urgencia
                 </a>
             </div>
-        </div>
-        <div class="border-t border-slate-100 pt-6 text-xs text-slate-400">
-            <p>© 2026 Florería Shely. Todos los derechos reservados.</p>
-        </div>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500 space-y-2">
+        <p class="font-semibold text-slate-700">Shely • Hermosillo, Sonora • +52 662 415 4024</p>
+        <p>© 2026 Shely. Todos los derechos reservados. Impulsado por <strong>FV DIGITAL HMO</strong>.</p>
     </footer>
 
-    <!-- SCRIPT CLIENTE -->
+    <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
+        <div class="group flex items-center gap-3">
+            <span class="opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 bg-slate-900 text-white text-xs font-semibold px-3 py-2 rounded-xl shadow-lg whitespace-nowrap">¿Es urgente? Escríbenos ya</span>
+            <a href="https://wa.me/526624154024?text=%F0%9F%9A%A8%20*URGENCIA*%20%F0%9F%9A%A8%0A%0AHola%2C%20necesito%20atenci%C3%B3n%20*urgente*%20con%20mi%20pedido.%20Por%20favor%2C%20cont%C3%A1cteme%20lo%20antes%20posible." target="_blank" class="pulse-ring w-14 h-14 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center text-xl shadow-xl hover:scale-110 transition-transform" title="Mensaje urgente"><i class="fa-solid fa-bell"></i></a>
+        </div>
+        <div class="group flex items-center gap-3">
+            <span class="opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 bg-slate-900 text-white text-xs font-semibold px-3 py-2 rounded-xl shadow-lg whitespace-nowrap">Escríbenos por WhatsApp</span>
+            <a href="https://wa.me/526624154024" target="_blank" class="float w-16 h-16 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center text-3xl shadow-xl hover:scale-110 transition-transform" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+    </div>
+
     <script>
-        let products = JSON.parse(localStorage.getItem('shely_products')) || [
-            { id: 1, name: 'Bouquet Rosas Pasión', category: 'Rosas', price: 650, image: 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=600&q=80', description: '24 rosas rojas selectas con follaje fino.', hidden: false, status: 'Disponible' },
-            { id: 2, name: 'Arreglo Primavera Alegre', category: 'Arreglos', price: 890, image: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=600&q=80', description: 'Gerberas, girasoles y flores silvestres en base de cerámica.', hidden: false, status: 'Disponible' },
-            { id: 3, name: 'Ramo Girasoles de Luz', category: 'Ramos', price: 550, image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=600&q=80', description: 'Girasoles frescos con eucalipto.', hidden: false, status: 'Disponible' },
-            { id: 4, name: 'Caja Romántica Premium', category: 'Rosas', price: 980, image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80', description: 'Caja cilindro con rosas rojas y detalles finos.', hidden: false, status: 'Agotado' }
-        ];
-
-        let orders = JSON.parse(localStorage.getItem('shely_orders')) || [];
-        let cart = JSON.parse(localStorage.getItem('shely_cart')) || [];
-        let currentUser = JSON.parse(localStorage.getItem('shely_current_user')) || null;
-
-        function saveStorage() {
-            localStorage.setItem('shely_products', JSON.stringify(products));
-            localStorage.setItem('shely_orders', JSON.stringify(orders));
-            localStorage.setItem('shely_cart', JSON.stringify(cart));
-            localStorage.setItem('shely_current_user', JSON.stringify(currentUser));
-            updateClientNav();
-            updateCounter();
-        }
-
-        function updateClientNav() {
-            const area = document.getElementById('client-nav-area');
-            if(currentUser) {
-                area.innerHTML = `
-                    <button onclick="openOrdersModal()" class="px-3 py-2 bg-rose-50 text-shely rounded-xl text-xs font-bold hover:bg-rose-100 transition-all flex items-center gap-1.5">
-                        <i class="fa-solid fa-box-archive"></i> Mis Pedidos (${orders.filter(o => o.customer.phone === currentUser.phone).length})
-                    </button>
-                    <button onclick="logoutClient()" class="text-xs text-slate-400 hover:text-rose-600 p-2" title="Cerrar sesión"><i class="fa-solid fa-right-from-bracket"></i></button>
-                `;
-            } else {
-                area.innerHTML = `
-                    <button onclick="openLoginModal()" class="px-4 py-2 bg-shely text-white rounded-xl text-xs font-semibold shadow-md shadow-rose-200 hover:bg-shely-dark transition-all">
-                        <i class="fa-solid fa-user mr-1"></i> Iniciar Sesión
-                    </button>
-                `;
-            }
-        }
-
-        function openLoginModal() { document.getElementById('client-login-modal').classList.remove('hidden'); }
-        function handleClientLogin(e) {
-            e.preventDefault();
-            currentUser = {
-                name: document.getElementById('login-name').value,
-                phone: document.getElementById('login-phone').value,
-                email: document.getElementById('login-email').value || ''
-            };
-            saveStorage();
-            document.getElementById('client-login-modal').classList.add('hidden');
-        }
-        function logoutClient() { currentUser = null; saveStorage(); }
-
-        function openOrdersModal() {
-            const list = document.getElementById('client-orders-list');
-            list.innerHTML = '';
-            const myOrders = orders.filter(o => o.customer.phone === currentUser.phone);
-
-            if(myOrders.length === 0) {
-                list.innerHTML = `<p class="text-center py-8 text-slate-400 text-sm">No has realizado ningún pedido todavía.</p>`;
-            } else {
-                myOrders.forEach(o => {
-                    let badgeColor = 'bg-amber-100 text-amber-700';
-                    if(o.status === 'Confirmado') badgeColor = 'bg-blue-100 text-blue-700';
-                    if(o.status === 'Entregado') badgeColor = 'bg-emerald-100 text-emerald-700';
-
-                    const itemsStr = o.items.map(i => `${i.qty}x ${i.name}`).join(', ');
-                    const div = document.createElement('div');
-                    div.className = "bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-2";
-                    div.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-slate-900 text-sm">${o.folio}</span>
-                            <span class="${badgeColor} px-2.5 py-0.5 rounded-full text-xs font-bold">${o.status}</span>
-                        </div>
-                        <p class="text-xs text-slate-600"><strong>Productos:</strong> ${itemsStr}</p>
-                        <p class="text-xs text-slate-600"><strong>Entrega:</strong> ${o.customer.date} a las ${o.customer.time} hrs</p>
-                        <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs font-bold">
-                            <span>Total: $${o.total} MXN</span>
-                            <span class="text-rose-500">Anticipo: $${o.anticipo} MXN</span>
-                        </div>
-                    `;
-                    list.appendChild(div);
-                });
-            }
-            document.getElementById('client-orders-modal').classList.remove('hidden');
-        }
-        function closeOrdersModal() { document.getElementById('client-orders-modal').classList.add('hidden'); }
-
-        function updateCounter() {
-            document.getElementById('cart-counter').textContent = cart.reduce((acc, i) => acc + i.qty, 0);
-        }
-
-        function renderCatalog(filtered = products.filter(p => !p.hidden)) {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
-
-            if(filtered.filter(p => !p.hidden).length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400"><i class="fa-solid fa-box-open text-4xl mb-2"></i><p>No hay arreglos disponibles.</p></div>`;
-                return;
-            }
-
-            filtered.filter(p => !p.hidden).forEach(p => {
-                const isAgotado = p.status === 'Agotado';
-                const card = document.createElement('div');
-                card.className = "bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group cursor-pointer hover:-translate-y-1";
-                card.onclick = () => openProductDetail(p.id);
-                card.innerHTML = `
-                    <div class="relative overflow-hidden h-64 bg-slate-100">
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-shely shadow-sm">${p.category}</span>
-                        <span class="absolute top-4 right-4 ${isAgotado ? 'bg-rose-500 text-white' : 'bg-emerald-500 text-white'} px-3 py-1 rounded-full text-xs font-bold shadow-sm">${p.status}</span>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow justify-between space-y-4">
-                        <div>
-                            <h3 class="font-bold text-slate-900 text-lg mb-1">${p.name}</h3>
-                            <p class="text-xs text-slate-500 line-clamp-2">${p.description}</p>
-                        </div>
-                        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-                            <div>
-                                <span class="text-xs text-slate-400 block font-medium">Precio</span>
-                                <span class="text-xl font-bold text-slate-900">$${p.price} <small class="text-xs font-normal text-slate-500">MXN</small></span>
-                            </div>
-                            <span class="text-xs font-semibold text-shely group-hover:underline flex items-center gap-1">Ver detalles <i class="fa-solid fa-arrow-right"></i></span>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function openProductDetail(id) {
-            const p = products.find(item => item.id === id);
-            if(!p) return;
-            document.getElementById('modal-img').src = p.image;
-            document.getElementById('modal-cat').textContent = p.category;
-            document.getElementById('modal-name').textContent = p.name;
-            document.getElementById('modal-desc').textContent = p.description;
-            document.getElementById('modal-price').textContent = `$${p.price} MXN`;
-            
-            const badge = document.getElementById('modal-status-badge');
-            badge.innerHTML = `<span class="inline-block ${p.status === 'Agotado' ? 'bg-rose-100 text-rose-600' : 'bg-emerald-100 text-emerald-600'} px-3 py-1 rounded-full text-xs font-bold">${p.status}</span>`;
-
-            const btn = document.getElementById('modal-add-btn');
-            if(p.status === 'Agotado') {
-                btn.disabled = true;
-                btn.className = "w-full bg-slate-300 text-slate-500 py-3 rounded-xl font-semibold text-sm cursor-not-allowed";
-                btn.innerHTML = "Producto Agotado";
-            } else {
-                btn.disabled = false;
-                btn.className = "w-full bg-shely hover:bg-shely-dark text-white py-3 rounded-xl font-semibold text-sm transition-all duration-300 shadow-md shadow-rose-200 hover:scale-105 flex items-center justify-center gap-2";
-                btn.innerHTML = `<i class="fa-solid fa-bag-shopping"></i> Agregar al Carrito`;
-                btn.onclick = () => { addToCart(p.id); closeProductDetailModal(); };
-            }
-            document.getElementById('product-detail-modal').classList.remove('hidden');
-        }
-        function closeProductDetailModal() { document.getElementById('product-detail-modal').classList.add('hidden'); }
-
-        function filterCategory(cat) {
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                if(btn.textContent.toLowerCase() === cat.toLowerCase() || (cat === 'todos' && btn.textContent === 'Todos')) {
-                    btn.className = "cat-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-shely text-white transition-all shadow-sm hover:scale-105";
-                } else {
-                    btn.className = "cat-btn px-4 py-2.5 rounded-xl text-sm font-semibold bg-white text-slate-600 hover:bg-rose-50 transition-all shadow-sm border border-slate-200 hover:scale-105";
-                }
-            });
-            if(cat === 'todos') renderCatalog(products.filter(p => !p.hidden));
-            else renderCatalog(products.filter(p => !p.hidden && p.category.toLowerCase() === cat.toLowerCase()));
-        }
-
-        function handleSearch() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            renderCatalog(products.filter(p => !p.hidden && (p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query))));
-        }
-
-        function addToCart(id) {
-            const p = products.find(item => item.id === id);
-            const existing = cart.find(i => i.id === id);
-            if(existing) existing.qty++;
-            else cart.push({ ...p, qty: 1 });
-            saveStorage();
-            openCartModal();
-        }
-
-        function openCartModal() {
-            if(!currentUser) {
-                alert('Por favor inicia sesión con tu nombre y teléfono primero.');
-                openLoginModal();
-                return;
-            }
-            document.getElementById('cust-name').value = currentUser.name;
-            document.getElementById('cust-phone').value = currentUser.phone;
-            document.getElementById('cart-modal').classList.remove('hidden');
-            renderCartItems();
-        }
-        function closeCartModal() { document.getElementById('cart-modal').classList.add('hidden'); }
-
-        function renderCartItems() {
-            const container = document.getElementById('cart-items-list');
-            container.innerHTML = '';
-            if(cart.length === 0) {
-                container.innerHTML = `<p class="text-center text-slate-400 text-sm py-4">Tu carrito está vacío.</p>`;
-                document.getElementById('cart-total').textContent = '$0 MXN';
-                return;
-            }
-            let total = 0;
-            cart.forEach(item => {
-                total += item.price * item.qty;
-                const div = document.createElement('div');
-                div.className = "flex items-center justify-between bg-slate-50 p-3 rounded-2xl border border-slate-100";
-                div.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover">
-                        <div>
-                            <h5 class="font-bold text-sm text-slate-900">${item.name}</h5>
-                            <span class="text-xs text-slate-500">$${item.price} x ${item.qty}</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-bold text-sm">$${item.price * item.qty}</span>
-                        <button onclick="removeFromCart(${item.id})" class="text-rose-400 hover:text-rose-600 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-            document.getElementById('cart-total').textContent = `$${total} MXN`;
-        }
-
-        function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveStorage(); renderCartItems(); }
-
-        function submitOrder(e) {
-            e.preventDefault();
-            if(cart.length === 0) return alert('Agrega productos.');
-
-            const folio = 'FS-' + Math.floor(1000 + Math.random() * 9000);
-            const total = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-            const anticipo = total / 2;
-
-            const newOrder = {
-                folio: folio,
-                customer: {
-                    name: currentUser.name,
-                    phone: currentUser.phone,
-                    address: document.getElementById('cust-address').value,
-                    date: document.getElementById('cust-date').value,
-                    time: document.getElementById('cust-time').value,
-                    note: document.getElementById('cust-note').value || 'Sin dedicatoria'
-                },
-                items: [...cart],
-                total: total,
-                anticipo: anticipo,
-                status: 'Pendiente',
-                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                dateCreated: new Date().toISOString().split('T')[0]
-            };
-
-            orders.unshift(newOrder);
-            cart = [];
-            saveStorage();
-            closeCartModal();
-
-            document.getElementById('alert-title').textContent = `¡Orden ${folio} Registrada!`;
-            document.getElementById('alert-msg').textContent = `Tu pedido ya está en el sistema. Recuerda enviar tu anticipo de $${anticipo} MXN. Se abrirá WhatsApp.`;
-            document.getElementById('custom-alert-modal').classList.remove('hidden');
-
-            const itemsText = newOrder.items.map(i => `   • ${i.qty}x ${i.name} ($${i.price * i.qty} MXN)`).join('%0A');
-            const wpMsg = `🌸 *NUEVO PEDIDO - FLORERÍA SHELY* 🌸%0A%0A*Folio:* ${folio}%0A*Cliente:* ${newOrder.customer.name}%0A*Teléfono:* ${newOrder.customer.phone}%0A*Dirección:* ${newOrder.customer.address}%0A*Entrega:* ${newOrder.customer.date} a las ${newOrder.customer.time} hrs%0A*Dedicatoria:* "${newOrder.customer.note}"%0A%0A*Productos:*%0A${itemsText}%0A%0A*Total:* $${total} MXN | *Anticipo:* $${anticipo} MXN`;
-
-            setTimeout(() => { window.open(`https://wa.me/526624154024?text=${wpMsg}`, '_blank'); }, 1500);
-        }
-
-        function closeCustomAlert() { document.getElementById('custom-alert-modal').classList.add('hidden'); }
-
-        window.onload = () => { renderCatalog(); updateCounter(); updateClientNav(); };
+        const io = new IntersectionObserver(entries => entries.forEach(en => {
+            if (en.isIntersecting) { en.target.classList.add('show'); io.unobserve(en.target); }
+        }), { threshold: .15 });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     </script>
 </body>
 </html>

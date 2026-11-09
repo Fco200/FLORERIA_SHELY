@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastelería Shely | Pasteles y Postres a tu Medida</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shely.css">
+    <style>
+        :root { --brand: #d9467a; --brand-dark: #b02e5f; --accent: #f9b872; --soft: #fdf0f5; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-pink-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-12 h-12 grad-brand rounded-2xl flex items-center justify-center text-white shadow-md shadow-pink-200 group-hover:-rotate-12 transition-transform duration-500">
+                    <i class="fa-solid fa-cake-candles text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-slate-900">Pastelería Shely</h1>
+                    <p class="text-xs text-brand font-medium"><i class="fa-solid fa-phone"></i> +52 662 415 4024</p>
+                </div>
+            </a>
+            <div class="flex items-center gap-3">
+                <div id="client-nav-area" class="flex items-center gap-2"></div>
+                <button onclick="SHELY.openCart()" class="relative p-2.5 bg-soft text-brand rounded-xl hover:bg-pink-100 transition-all duration-300 hover:scale-105">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                    <span id="cart-counter" class="absolute -top-1 -right-1 bg-brand text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                </button>
+                <a href="index.html" class="p-2.5 text-slate-400 hover:text-slate-600 rounded-xl transition-all" title="Inicio">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <section class="fade-in relative overflow-hidden rounded-3xl text-white p-8 sm:p-14 shadow-2xl" style="background: linear-gradient(135deg, #3b0a1e, #7c2d12);">
+            <div class="blob w-72 h-72 bg-pink-400 -top-20 -left-10"></div>
+            <div class="blob w-64 h-64 bg-amber-300 -bottom-16 right-10" style="animation-delay: -4s"></div>
+            <i class="fa-solid fa-cake-candles float absolute right-10 top-10 text-8xl text-white opacity-10 hidden sm:block"></i>
+            <div class="relative z-10 max-w-xl space-y-5">
+                <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-medium text-pink-100 border border-white/10">
+                    <i class="fa-solid fa-location-dot text-amber-300"></i> Hermosillo, Sonora
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-bold tracking-tight leading-tight">Dulces momentos <span class="text-gradient">hechos a mano</span></h2>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">Pasteles, cupcakes y postres artesanales para cada celebración. Inicia sesión, elige tu favorito o diseña tu pastel personalizado.</p>
+                <div class="flex flex-wrap gap-3 pt-2">
+                    <a href="#catalogo" class="btn-brand px-6 py-3 rounded-2xl font-semibold text-sm shadow-lg"><i class="fa-solid fa-eye"></i> Ver catálogo</a>
+                    <button onclick="SHELY.openCustom()" class="bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md px-6 py-3 rounded-2xl font-semibold text-sm transition-all hover:-translate-y-0.5"><i class="fa-solid fa-wand-magic-sparkles"></i> Pastel personalizado</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="catalogo" class="space-y-8 scroll-mt-28">
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div id="category-filters" class="flex flex-wrap gap-2 w-full md:w-auto"></div>
+                <div class="relative w-full md:w-80">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="search-input" oninput="SHELY.applyFilters()" placeholder="Buscar pastel o postre..." class="field pl-10 shadow-sm">
+                </div>
+            </div>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <section class="reveal relative overflow-hidden rounded-3xl grad-brand text-white p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+            <div class="blob w-48 h-48 bg-white -top-10 -right-10"></div>
+            <div class="relative space-y-2">
+                <span class="text-xs font-bold uppercase tracking-widest opacity-80">Pedidos personalizados</span>
+                <h3 class="text-2xl sm:text-3xl font-bold">¿Sueñas con un pastel único?</h3>
+                <p class="text-sm opacity-90 max-w-lg">Diseñamos pasteles de cumpleaños, bodas, XV años, baby shower y eventos corporativos a tu medida. Cuéntanos tu idea y te enviamos cotización.</p>
+            </div>
+            <button onclick="SHELY.openCustom()" class="relative bg-white text-brand font-bold px-6 py-3.5 rounded-2xl shadow-lg hover:scale-105 transition-transform whitespace-nowrap">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Solicitar cotización
+            </button>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-12 mt-16 text-sm text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            <div>
+                <h4 class="font-bold text-slate-900 text-base mb-2">Pastelería Shely</h4>
+                <p class="text-xs text-slate-500">Hermosillo, Sonora. Pasteles artesanales y postres que endulzan tus días.</p>
+                <p class="text-xs text-brand font-semibold mt-2"><i class="fa-solid fa-phone"></i> +52 662 415 4024</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 text-base mb-2">Enlaces Rápidos</h4>
+                <ul class="space-y-1.5 text-xs">
+                    <li><a href="index.html" class="hover:text-brand transition-all">Inicio</a></li>
+                    <li><a href="floreria.html" class="hover:text-brand transition-all">Florería Shely</a></li>
+                </ul>
+            </div>
+            <div class="bg-pink-50/60 p-6 rounded-3xl border border-pink-100 space-y-2">
+                <span class="text-[10px] font-bold uppercase text-brand tracking-wider block">Desarrollo Profesional</span>
+                <h4 class="font-bold text-slate-900 text-sm">¿Quieres una página como esta para tu negocio?</h4>
+                <p class="text-xs text-slate-600">Impulsado por <strong>FV DIGITAL HMO</strong>.</p>
+                <a href="https://wa.me/526625374491?text=Hola,%20me%20interesa%20una%20página%20web%20profesional%20con%20sistema%20para%20mi%20negocio." target="_blank" class="inline-block bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 mr-1"></i> Contáctanos: 662 537 4491
+                </a>
+            </div>
+        </div>
+        <div class="border-t border-slate-100 mt-8 pt-6 text-xs text-slate-400 text-center">
+            <p>© 2026 Pastelería Shely. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.SHELY_CONFIG = {
+            id: 'pasteleria',
+            name: 'Pastelería Shely',
+            prefix: 'PS',
+            emoji: '🎂',
+            icon: 'fa-cake-candles',
+            whatsapp: '526624154024',
+            clabe: '012180001234567890',
+            storageKey: 'pasteleria_products',
+            categories: ['Pasteles', 'Cupcakes', 'Galletas', 'Postres'],
+            customTypes: ['Cumpleaños', 'Boda', 'XV años', 'Baby shower', 'Corporativo', 'Otro'],
+            customPlaceholder: 'Ej. Pastel de 3 pisos, chocolate con fresas, decoración en tonos rosa y dorado con topper de su personaje favorito...',
+            seedProducts: [
+                { id: 1, name: 'Pastel de Chocolate Clásico', category: 'Pasteles', price: 850, image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80', description: 'Bizcocho húmedo de chocolate con ganache y fresas frescas. Porciones para 20.', hidden: false, status: 'Disponible' },
+                { id: 2, name: 'Cheesecake de Fresa', category: 'Postres', price: 420, image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80', description: 'Base de galleta con queso crema y salsa natural de fresa.', hidden: false, status: 'Disponible' },
+                { id: 3, name: 'Cupcakes Arcoíris (6 pzas)', category: 'Cupcakes', price: 240, image: 'https://images.unsplash.com/photo-1514517220017-8ce97a34a7b6?auto=format&fit=crop&w=600&q=80', description: 'Cupcakes de vainilla con buttercream de colores y granas.', hidden: false, status: 'Disponible' },
+                { id: 4, name: 'Galletas Decoradas (12 pzas)', category: 'Galletas', price: 300, image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=600&q=80', description: 'Galletas de mantequilla decoradas a mano con glasé real.', hidden: false, status: 'Agotado' }
+            ]
+        };
+    </script>
+    <script src="shely.js"></script>
+</body>
+</html>
