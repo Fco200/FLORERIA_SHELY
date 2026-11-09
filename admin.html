@@ -86,6 +86,10 @@
                         <button onclick="filterOrders('Entregado')" data-f="Entregado" class="f-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all">Entregados</button>
                     </div>
                 </div>
+                <div id="orders-stats" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
+                <div class="flex justify-end">
+                    <button onclick="exportCSV()" class="px-4 py-2 bg-slate-800 border border-slate-700 hover:bg-slate-700 rounded-xl text-xs font-semibold transition-all flex items-center gap-2"><i class="fa-solid fa-file-csv text-emerald-400"></i> Exportar pedidos a Excel (CSV)</button>
+                </div>
                 <div id="orders-cards-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
             </section>
 
@@ -96,7 +100,10 @@
                         <h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-boxes-stacked text-rose-400"></i> Productos de <span id="prod-biz-name"></span></h2>
                         <p class="text-xs text-slate-400">Controla precios, stock y visibilidad en la tienda.</p>
                     </div>
+                    <div class="flex gap-2">
+                    <button onclick="downloadCatalogPDF()" class="bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all flex items-center gap-2"><i class="fa-solid fa-file-pdf text-rose-400"></i> Catálogo PDF</button>
                     <button onclick="openProductModal()" class="bg-rose-500 hover:bg-rose-600 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all shadow-lg flex items-center gap-2"><i class="fa-solid fa-plus"></i> Nuevo producto</button>
+                    </div>
                 </div>
                 <div class="bg-slate-800 border border-slate-700 rounded-3xl overflow-hidden shadow-xl">
                     <div class="overflow-x-auto">
@@ -179,7 +186,10 @@
                 <div class="flex justify-between pt-2 border-t border-slate-800 text-sm font-bold"><span>Total:</span><span id="inv-total" class="text-rose-400"></span></div>
                 <div class="flex justify-between text-xs text-slate-400"><span>Anticipo (50%):</span><span id="inv-anticipo"></span></div>
             </div>
-            <button onclick="closeModal('invoice-modal')" class="w-full py-3 bg-slate-900 text-white rounded-xl font-semibold text-sm">Cerrar ticket</button>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="invoicePDF()" class="w-full py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-semibold text-sm"><i class="fa-solid fa-file-pdf"></i> Descargar PDF</button>
+                <button onclick="closeModal('invoice-modal')" class="w-full py-3 bg-slate-900 text-white rounded-xl font-semibold text-sm">Cerrar ticket</button>
+            </div>
         </div>
     </div>
 
@@ -205,6 +215,9 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="shely-tools.js"></script>
+
     <!-- SCRIPT ADMIN -->
     <script>
         const $ = id => document.getElementById(id);
@@ -215,11 +228,11 @@
 
         const BIZ = {
             floreria: {
-                icon: 'fa-seedling', grad: 'biz-grad-floreria', storageKey: 'shely_products', emoji: '🌸',
+                icon: 'fa-seedling', grad: 'biz-grad-floreria', storageKey: 'shely_products', emoji: '🌸', color: '#e35d6a',
                 defaults: { name: 'Florería Shely', prefix: 'FS', whatsapp: '526624154024', clabe: '012180001234567890', categories: ['Ramos', 'Arreglos', 'Rosas'] }
             },
             pasteleria: {
-                icon: 'fa-cake-candles', grad: 'biz-grad-pasteleria', storageKey: 'pasteleria_products', emoji: '🎂',
+                icon: 'fa-cake-candles', grad: 'biz-grad-pasteleria', storageKey: 'pasteleria_products', emoji: '🎂', color: '#d9467a',
                 defaults: { name: 'Pastelería Shely', prefix: 'PS', whatsapp: '526624154024', clabe: '012180001234567890', categories: ['Pasteles', 'Cupcakes', 'Galletas', 'Postres'] }
             }
         };
@@ -231,7 +244,7 @@
         let orders = [];
         let products = [];
 
-        const cfg = id => ({ ...BIZ[id].defaults, ...read('shely_settings_' + id, {}) });
+        const cfg = id => ({ ...BIZ[id].defaults, emoji: BIZ[id].emoji, color: BIZ[id].color, ...read('shely_settings_' + id, {}) });
         const bizOf = o => o.businessId || 'floreria';
 
         function handleLogin(e) {
@@ -315,6 +328,16 @@
 
         function renderOrders() {
             orders = read('shely_orders', []);
+            const mine = orders.filter(o => bizOf(o) === current);
+            const t = new Date();
+            const todayStr = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
+            const sold = mine.filter(o => !o.custom && (o.status === 'Confirmado' || o.status === 'Entregado')).reduce((a, o) => a + o.total, 0);
+            $('orders-stats').innerHTML = [
+                ['Pedidos totales', mine.length, 'fa-ticket', 'text-rose-400'],
+                ['Pendientes', mine.filter(o => o.status === 'Pendiente').length, 'fa-clock', 'text-amber-400'],
+                ['Ventas confirmadas', money(sold), 'fa-sack-dollar', 'text-emerald-400'],
+                ['Pedidos hoy', mine.filter(o => o.dateCreated === todayStr).length, 'fa-calendar-day', 'text-blue-400']
+            ].map(([l, v, ic, c]) => `<div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 flex items-center gap-4"><div class="w-11 h-11 rounded-xl bg-slate-900 flex items-center justify-center ${c}"><i class="fa-solid ${ic}"></i></div><div><p class="text-xs text-slate-400">${l}</p><p class="text-xl font-bold">${v}</p></div></div>`).join('');
             const grid = $('orders-cards-grid');
             const list = orders.filter(o => bizOf(o) === current && (filter === 'todos' || o.status === filter));
             if (!list.length) {
@@ -347,10 +370,11 @@
                                 <option value="Entregado">Entregado</option>
                             </select>
                             <button onclick="openInvoice('${esc(o.folio)}')" class="p-2.5 bg-slate-700 text-slate-200 rounded-xl hover:bg-slate-600" title="Ver ticket"><i class="fa-solid fa-file-invoice text-xs"></i></button>
+                            <button onclick="downloadOrderPDF('${esc(o.folio)}')" class="p-2.5 bg-slate-700 text-rose-300 rounded-xl hover:bg-slate-600" title="Descargar PDF"><i class="fa-solid fa-file-pdf text-xs"></i></button>
                             <button onclick="deleteOrder('${esc(o.folio)}')" class="p-2.5 bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white rounded-xl" title="Eliminar"><i class="fa-solid fa-trash text-xs"></i></button>
                         </div>
                         <button onclick="sendWhatsApp('${esc(o.folio)}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold text-xs transition-all flex items-center justify-center gap-2 shadow-md">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> Enviar WhatsApp de estatus
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Enviar confirmación + PDF por WhatsApp
                         </button>
                     </div>
                 </div>`).join('');
@@ -384,19 +408,40 @@
             $('inv-total').textContent = o.custom ? 'Por cotizar' : money(o.total);
             $('inv-anticipo').textContent = o.custom ? '—' : money(o.anticipo);
             $('inv-items-table').innerHTML = o.items.map(i => `<div class="flex justify-between text-xs py-1 border-b border-slate-100"><span>${i.qty}x ${esc(i.name)}</span><strong class="text-slate-900">${i.price ? money(i.price * i.qty) : '—'}</strong></div>`).join('');
+            currentInvoice = o;
             showModal('invoice-modal');
         }
 
         function sendWhatsApp(folio) {
             const o = read('shely_orders', []).find(x => x.folio === folio);
             if (!o) return;
-            const name = cfg(bizOf(o)).name;
-            const n = o.customer.name, f = o.folio, s = o.status;
-            let msg = `¡Hola ${n}! Te saludamos de *${name}*. Tu pedido *${f}* está en estatus: *${s}*.`;
-            if (s === 'Confirmado') msg = `¡Hola ${n}! Recibimos tu anticipo. Tu pedido *${f}* ha sido *confirmado* y ya estamos elaborándolo. ¡Gracias!`;
-            if (s === 'Entregado') msg = `¡Hola ${n}! Tu pedido *${f}* ha sido *entregado con éxito*. ¡Esperamos que te encante! 🎉`;
-            if (o.custom && s === 'Pendiente') msg = `¡Hola ${n}! Recibimos tu solicitud personalizada *${f}* en *${name}*. Te enviaremos tu cotización en breve.`;
-            window.open(`https://wa.me/52${o.customer.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+            const biz = cfg(bizOf(o));
+            ShelyTools.sendPDF(ShelyTools.orderPDF(o, biz), `${o.folio}.pdf`, ShelyTools.statusMessage(o, biz), '52' + o.customer.phone);
+        }
+
+        let currentInvoice = null;
+        function downloadOrderPDF(folio) {
+            const o = read('shely_orders', []).find(x => x.folio === folio);
+            if (!o) return;
+            ShelyTools.download(ShelyTools.orderPDF(o, cfg(bizOf(o))), `${o.folio}.pdf`);
+        }
+        function invoicePDF() {
+            if (currentInvoice) downloadOrderPDF(currentInvoice.folio);
+        }
+        function downloadCatalogPDF() {
+            ShelyTools.download(ShelyTools.catalogPDF(products, cfg(current)), `Catalogo-${current}.pdf`);
+        }
+        function exportCSV() {
+            const rows = [['Folio', 'Tipo', 'Estatus', 'Cliente', 'Telefono', 'Direccion', 'Entrega', 'Total', 'Anticipo', 'Fecha registro']];
+            read('shely_orders', []).filter(o => bizOf(o) === current).forEach(o => rows.push([
+                o.folio, o.type || 'Pedido', o.status, o.customer.name, o.customer.phone, o.customer.address,
+                `${o.customer.date} ${o.customer.time || ''}`.trim(), o.custom ? 'Por cotizar' : o.total, o.custom ? '' : o.anticipo, o.dateCreated
+            ]));
+            const csv = '\uFEFF' + rows.map(r => r.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+            a.download = `pedidos-${current}.csv`;
+            a.click();
         }
 
         function renderProducts() {

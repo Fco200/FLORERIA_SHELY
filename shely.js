@@ -9,11 +9,14 @@
     Object.assign(C, read('shely_settings_' + C.id, {}));
     if (localStorage.getItem(C.storageKey) === null) write(C.storageKey, C.seedProducts);
     const waLink = text => `https://wa.me/${C.whatsapp}?text=${encodeURIComponent(text)}`;
+    const today = () => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    const bizInfo = () => ({ ...C, color: getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#e35d6a' });
 
     let products = read(C.storageKey, C.seedProducts);
     let orders = read('shely_orders', []);
     let cart = read('shely_cart_' + C.id, []);
     let currentUser = read('shely_current_user', null);
+    let favs = read('shely_favs_' + C.id, []);
     let currentCat = 'Todos';
     let pendingAction = null;
 
@@ -67,7 +70,7 @@
         <div class="modal-box relative">
             <button onclick="SHELY.closeModal('cart-modal')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2 pb-4 mb-4 border-b border-rose-100"><i class="fa-solid fa-cart-shopping text-brand"></i> Carrito y pedido</h3>
-            <div id="cart-items" class="space-y-3 mb-6 max-h-48 overflow-y-auto pr-1"></div>
+            <div id="cart-items" class="space-y-3 mb-6 max-h-56 overflow-y-auto pr-1"></div>
             <form id="checkout-form" class="space-y-4 pt-4 border-t border-rose-100">
                 <h4 class="text-xs font-bold uppercase text-slate-400 tracking-wider">Datos de entrega</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -147,6 +150,7 @@
         write('shely_orders', orders);
         write('shely_cart_' + C.id, cart);
         write('shely_current_user', currentUser);
+        write('shely_favs_' + C.id, favs);
         renderNav();
         updateCounter();
     }
@@ -199,7 +203,17 @@
     function renderFilters() {
         const box = $('category-filters');
         if (!box) return;
-        box.innerHTML = ['Todos', ...C.categories].map(c => `<button data-cat="${esc(c)}" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm hover:scale-105 border">${esc(c)}</button>`).join('');
+        box.innerHTML = ['Todos', '♥ Favoritos', ...C.categories].map(c => {
+            const key = c.startsWith('♥') ? 'Favoritos' : c;
+            return `<button data-cat="${esc(key)}" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm hover:scale-105 border">${esc(c)}</button>`;
+        }).join('') + `
+            <select id="sort-select" onchange="SHELY.applyFilters()" class="px-3 py-2.5 rounded-xl text-sm bg-white border border-slate-200 shadow-sm outline-none focus:ring-2 focus:ring-brand">
+                <option value="">Ordenar: recomendados</option>
+                <option value="precio-asc">Precio: menor a mayor</option>
+                <option value="precio-desc">Precio: mayor a menor</option>
+                <option value="nombre">Nombre A-Z</option>
+            </select>
+            <button onclick="SHELY.downloadCatalog()" class="px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 shadow-sm hover:scale-105 transition-all"><i class="fa-solid fa-file-pdf text-rose-300"></i> Catálogo PDF</button>`;
         box.onclick = e => {
             const b = e.target.closest('[data-cat]');
             if (b) { currentCat = b.dataset.cat; applyFilters(); }
@@ -208,33 +222,47 @@
 
     function applyFilters() {
         const q = ($('search-input')?.value || '').trim().toLowerCase();
-        const list = products.filter(p => !p.hidden &&
-            (currentCat === 'Todos' || p.category === currentCat) &&
+        const sort = $('sort-select')?.value || '';
+        let list = products.filter(p => !p.hidden &&
+            (currentCat === 'Todos' || (currentCat === 'Favoritos' ? favs.includes(p.id) : p.category === currentCat)) &&
             (!q || p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q)));
+        if (sort === 'precio-asc') list.sort((a, b) => a.price - b.price);
+        if (sort === 'precio-desc') list.sort((a, b) => b.price - a.price);
+        if (sort === 'nombre') list.sort((a, b) => a.name.localeCompare(b.name, 'es'));
         document.querySelectorAll('.cat-btn').forEach(b => {
             const on = b.dataset.cat === currentCat;
             b.className = 'cat-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm hover:scale-105 border ' +
                 (on ? 'btn-brand border-transparent' : 'bg-white text-slate-600 border-slate-200 hover:bg-soft');
         });
         renderCatalog(list);
+        const count = $('catalog-count');
+        if (count) count.textContent = `${list.length} producto(s)`;
+    }
+
+    function toggleFav(id) {
+        favs = favs.includes(id) ? favs.filter(x => x !== id) : [...favs, id];
+        save();
+        applyFilters();
     }
 
     function renderCatalog(list) {
         const grid = $('product-grid');
         if (!grid) return;
         if (!list.length) {
-            grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400"><i class="fa-solid fa-box-open text-4xl mb-2"></i><p>No hay productos disponibles.</p></div>`;
+            grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400"><i class="fa-solid fa-box-open text-4xl mb-2"></i><p>No hay productos en esta selección.</p></div>`;
             return;
         }
         grid.innerHTML = list.map((p, i) => {
             const agotado = p.status === 'Agotado';
+            const fav = favs.includes(p.id);
             return `
-            <article class="fade-in bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm lift flex flex-col cursor-pointer group" style="animation-delay:${i * 70}ms" onclick="SHELY.openDetail(${p.id})">
+            <article class="fade-in bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm lift flex flex-col cursor-pointer group" style="animation-delay:${Math.min(i, 12) * 60}ms" onclick="SHELY.openDetail(${p.id})">
                 <div class="relative h-60 overflow-hidden bg-soft flex items-center justify-center">
                     <i class="fa-solid ${C.icon} text-6xl text-brand opacity-30 absolute"></i>
                     <img src="${esc(p.image)}" alt="${esc(p.name)}" class="relative w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.remove()">
                     <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-brand shadow-sm">${esc(p.category)}</span>
                     <span class="absolute top-4 right-4 ${agotado ? 'bg-rose-500' : 'bg-emerald-500'} text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">${esc(p.status)}</span>
+                    <button onclick="event.stopPropagation(); SHELY.toggleFav(${p.id})" class="absolute bottom-4 right-4 z-10 w-10 h-10 rounded-full bg-white/95 shadow flex items-center justify-center hover:scale-110 transition ${fav ? 'text-rose-500' : 'text-slate-400'}" title="Favorito"><i class="fa-${fav ? 'solid' : 'regular'} fa-heart"></i></button>
                 </div>
                 <div class="p-6 flex flex-col flex-grow justify-between gap-4">
                     <div>
@@ -297,19 +325,31 @@
     function renderCart() {
         const box = $('cart-items');
         if (!cart.length) {
-            box.innerHTML = `<p class="text-center text-slate-400 text-sm py-4">Tu carrito está vacío.</p>`;
+            box.innerHTML = `<p class="text-center text-slate-400 text-sm py-4">Tu carrito está vacío. Agrega productos del catálogo.</p>`;
             $('cart-total').textContent = money(0);
             return;
         }
         box.innerHTML = cart.map(i => `
-            <div class="fade-in flex items-center justify-between bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                <div><h5 class="font-bold text-sm text-slate-900">${esc(i.name)}</h5><span class="text-xs text-slate-500">${money(i.price)} × ${i.qty}</span></div>
-                <div class="flex items-center gap-3">
-                    <span class="font-bold text-sm">${money(i.price * i.qty)}</span>
+            <div class="fade-in flex items-center justify-between gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                <div class="min-w-0"><h5 class="font-bold text-sm text-slate-900 truncate">${esc(i.name)}</h5><span class="text-xs text-slate-500">${money(i.price)} c/u</span></div>
+                <div class="flex items-center gap-2">
+                    <button onclick="SHELY.changeQty(${i.id}, -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:bg-soft text-slate-600"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                    <span class="w-6 text-center font-bold text-sm">${i.qty}</span>
+                    <button onclick="SHELY.changeQty(${i.id}, 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:bg-soft text-slate-600"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                    <span class="font-bold text-sm w-24 text-right">${money(i.price * i.qty)}</span>
                     <button onclick="SHELY.removeFromCart(${i.id})" class="text-rose-400 hover:text-rose-600 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
                 </div>
             </div>`).join('');
         $('cart-total').textContent = money(cart.reduce((a, i) => a + i.price * i.qty, 0));
+    }
+
+    function changeQty(id, d) {
+        const item = cart.find(i => i.id === id);
+        if (!item) return;
+        item.qty += d;
+        if (item.qty < 1) cart = cart.filter(i => i.id !== id);
+        save();
+        renderCart();
     }
 
     function removeFromCart(id) {
@@ -354,16 +394,15 @@
         cart = [];
         save();
         closeModal('cart-modal');
-
-        const items = order.items.map(i => `   • ${i.qty}x ${i.name} (${money(i.price * i.qty)})`).join('\n');
-        const text = `${C.emoji} *NUEVO PEDIDO - ${C.name}* ${C.emoji}\n\n*Folio:* ${order.folio}\n*Cliente:* ${order.customer.name}\n*Teléfono:* ${order.customer.phone}\n*Dirección:* ${order.customer.address}\n*Entrega:* ${order.customer.date} a las ${order.customer.time} hrs\n*Dedicatoria:* "${order.customer.note}"\n\n*Productos:*\n${items}\n\n*Total:* ${money(total)} | *Anticipo (50%):* ${money(anticipo)}`;
-
-        showAlert(`¡Orden ${order.folio} registrada!`, `Tu pedido ya está en el sistema. Recuerda enviar tu anticipo de ${money(anticipo)}. Se abrirá WhatsApp para confirmarlo.`);
-        setTimeout(() => window.open(waLink(text), '_blank'), 1500);
+        showAlert(`¡Orden ${order.folio} registrada!`, `Tu pedido ya está en el sistema. Envía tu anticipo de ${money(anticipo)} para confirmarlo. Se abrirá WhatsApp con el resumen en PDF.`);
+        setTimeout(() => sharePDF(order.folio, true), 1500);
     }
 
     function openCustom() {
-        requireLogin(() => showModal('custom-modal'));
+        requireLogin(() => {
+            $('custom-form').closest('.modal-box').scrollTop = 0;
+            showModal('custom-modal');
+        });
     }
 
     function submitCustom(e) {
@@ -396,25 +435,72 @@
         save();
         e.target.reset();
         closeModal('custom-modal');
-
-        const text = `${C.emoji} *PEDIDO PERSONALIZADO - ${C.name}* ${C.emoji}\n\n*Folio:* ${order.folio}\n*Cliente:* ${order.customer.name}\n*Teléfono:* ${order.customer.phone}\n*Tipo de evento:* ${details.tipo}\n*Tamaño / personas:* ${details.tamano || 'Por definir'}\n*Fecha:* ${order.customer.date}${order.customer.time ? ' a las ' + order.customer.time + ' hrs' : ''}\n*Dirección:* ${order.customer.address}\n*Presupuesto aprox.:* ${details.presupuesto ? money(details.presupuesto) : 'Por definir'}\n*Referencia:* ${details.referencia || 'Sin imagen'}\n\n*Idea:*\n${details.descripcion}`;
-
         showAlert(`¡Solicitud ${order.folio} enviada!`, 'Recibimos tu idea. Te enviaremos una cotización por WhatsApp; el anticipo del 50% se solicita al aprobar el diseño.');
-        setTimeout(() => window.open(waLink(text), '_blank'), 1500);
+        setTimeout(() => sharePDF(order.folio, true), 1500);
+    }
+
+    function findOrder(folio) {
+        return read('shely_orders', []).find(o => o.folio === folio);
+    }
+
+    function orderPDF(folio) {
+        const o = findOrder(folio);
+        if (!o) return;
+        ShelyTools.download(ShelyTools.orderPDF(o, bizInfo()), `${o.folio}.pdf`);
+    }
+
+    async function sharePDF(folio, auto) {
+        const o = findOrder(folio);
+        if (!o) return;
+        const biz = bizInfo();
+        const doc = ShelyTools.orderPDF(o, biz);
+        const text = auto
+            ? `Hola, te envío el resumen de mi pedido *${o.folio}* (${biz.name}).\n👤 ${o.customer.name} • 📞 ${o.customer.phone}`
+            : `Hola ${biz.name}, les comparto el PDF de mi pedido *${o.folio}*. ¡Gracias!`;
+        await ShelyTools.sendPDF(doc, `${o.folio}.pdf`, text, biz.whatsapp);
+    }
+
+    function downloadCatalog() {
+        const doc = ShelyTools.catalogPDF(products, bizInfo());
+        ShelyTools.download(doc, `Catalogo-${C.id}.pdf`);
+    }
+
+    function reorder(folio) {
+        const o = findOrder(folio);
+        if (!o) return;
+        let added = 0;
+        o.items.forEach(i => {
+            const p = products.find(x => x.name === i.name && !x.hidden && x.status !== 'Agotado');
+            if (!p) return;
+            const ex = cart.find(c => c.id === p.id);
+            if (ex) ex.qty += i.qty;
+            else cart.push({ id: p.id, name: p.name, price: p.price, qty: i.qty });
+            added++;
+        });
+        save();
+        closeModal('orders-modal');
+        if (!added) { alert('Estos productos ya no están disponibles.'); return; }
+        openCart();
     }
 
     function openOrders() {
         const list = $('orders-list');
-        const mine = orders.filter(o => currentUser && o.customer.phone === currentUser.phone);
+        const mine = read('shely_orders', []).filter(o => currentUser && o.customer.phone === currentUser.phone);
         if (!mine.length) {
             list.innerHTML = `<div class="text-center py-10 text-slate-400"><i class="fa-solid fa-basket-shopping text-4xl mb-3"></i><p class="text-sm">Aún no tienes pedidos.</p></div>`;
         } else {
             const badge = { Pendiente: 'bg-amber-100 text-amber-700', Confirmado: 'bg-blue-100 text-blue-700', Entregado: 'bg-emerald-100 text-emerald-700' };
-            list.innerHTML = mine.map(o => `
-                <div class="fade-in bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-2">
+            const steps = ['Pendiente', 'Confirmado', 'Entregado'];
+            list.innerHTML = mine.map(o => {
+                const idx = Math.max(0, steps.indexOf(o.status));
+                return `
+                <div class="fade-in bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-3">
                     <div class="flex justify-between items-center gap-2">
                         <div><span class="font-bold text-slate-900 text-sm">${esc(o.folio)}</span> <span class="text-[10px] uppercase font-bold text-brand">${esc(o.type || 'Pedido')}</span></div>
                         <span class="${badge[o.status] || badge.Pendiente} px-2.5 py-0.5 rounded-full text-xs font-bold">${esc(o.status)}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        ${steps.map((s, i) => `<div class="flex-1 flex flex-col items-center gap-1"><div class="h-1.5 w-full rounded-full ${i <= idx ? 'bg-brand' : 'bg-slate-200'}"></div><span class="text-[10px] ${i <= idx ? 'text-brand font-bold' : 'text-slate-400'}">${s === 'Confirmado' ? 'En elaboración' : s}</span></div>`).join('')}
                     </div>
                     <p class="text-xs text-slate-600"><strong>Entrega:</strong> ${esc(o.customer.date)} ${o.customer.time ? 'a las ' + esc(o.customer.time) + ' hrs' : ''}</p>
                     <p class="text-xs text-slate-600"><strong>Detalle:</strong> ${esc(o.items.map(i => `${i.qty}x ${i.name}`).join(', '))}</p>
@@ -422,7 +508,13 @@
                         <span>${o.custom ? 'Total: Por cotizar' : 'Total: ' + money(o.total)}</span>
                         ${o.custom ? '' : `<span class="text-brand">Anticipo: ${money(o.anticipo)}</span>`}
                     </div>
-                </div>`).join('');
+                    <div class="grid grid-cols-3 gap-2 pt-1">
+                        <button onclick="SHELY.orderPDF('${esc(o.folio)}')" class="py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold hover:bg-soft transition"><i class="fa-solid fa-file-pdf text-rose-500"></i> PDF</button>
+                        <button onclick="SHELY.sharePDF('${esc(o.folio)}')" class="py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition"><i class="fa-brands fa-whatsapp"></i> Enviar</button>
+                        ${o.custom ? '<span></span>' : `<button onclick="SHELY.reorder('${esc(o.folio)}')" class="py-2 rounded-xl btn-brand text-xs font-semibold"><i class="fa-solid fa-rotate-right"></i> Repetir</button>`}
+                    </div>
+                </div>`;
+            }).join('');
         }
         showModal('orders-modal');
     }
@@ -454,6 +546,7 @@
         $('checkout-form').addEventListener('submit', submitCart);
         $('custom-form').addEventListener('submit', submitCustom);
         document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); }));
+        document.querySelectorAll('input[type=date]').forEach(i => i.min = today());
     }
 
     function revealOnScroll() {
@@ -472,6 +565,7 @@
 
     window.SHELY = {
         openLogin, openOrders, openDetail, openCart, openCustom, logout,
-        closeModal, applyFilters, removeFromCart
+        closeModal, applyFilters, removeFromCart, changeQty, toggleFav,
+        orderPDF, sharePDF, downloadCatalog, reorder
     };
 })();
